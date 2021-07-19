@@ -25,7 +25,7 @@ module.exports = (function(e, t) {
     "use strict";
     const n = r(87);
     const i = r(118);
-    const s = r(49);
+    const s = r(494);
     const o = (e, t) => {
       if (!e && t) {
         throw new Error(
@@ -88,7 +88,7 @@ module.exports = (function(e, t) {
     }
   },
   9: function(e, t, r) {
-    var n = r(969);
+    var n = r(49);
     var i = function() {};
     var s = function(e) {
       return e.setHeader && typeof e.abort === "function";
@@ -197,7 +197,7 @@ module.exports = (function(e, t) {
   19: function(e, t, r) {
     e.exports = authenticationPlugin;
     const { Deprecation: n } = r(692);
-    const i = r(969);
+    const i = r(49);
     const s = i((e, t) => e.warn(t));
     const o = r(674);
     const a = r(471);
@@ -548,41 +548,43 @@ module.exports = (function(e, t) {
     }
   },
   49: function(e, t, r) {
-    "use strict";
-    const n = r(87);
-    const i = r(955);
-    const s = new Map([
-      ["10.0", "10"],
-      ["6.3", "8.1"],
-      ["6.2", "8"],
-      ["6.1", "7"],
-      ["6.0", "Vista"],
-      ["5.2", "Server 2003"],
-      ["5.1", "XP"],
-      ["5.0", "2000"],
-      ["4.9", "ME"],
-      ["4.1", "98"],
-      ["4.0", "95"]
-    ]);
-    const o = e => {
-      const t = /\d+\.\d/.exec(e || n.release());
-      if (e && !t) {
-        throw new Error("`release` argument doesn't match `n.n`");
-      }
-      const r = (t || [])[0];
-      if (
-        (!e || e === n.release()) &&
-        ["6.1", "6.2", "6.3", "10.0"].includes(r)
-      ) {
-        const e = i.sync("wmic", ["os", "get", "Caption"]).stdout || "";
-        const t = (e.match(/2008|2012|2016/) || [])[0];
-        if (t) {
-          return `Server ${t}`;
-        }
-      }
-      return s.get(r);
-    };
-    e.exports = o;
+    var n = r(11);
+    e.exports = n(once);
+    e.exports.strict = n(onceStrict);
+    once.proto = once(function() {
+      Object.defineProperty(Function.prototype, "once", {
+        value: function() {
+          return once(this);
+        },
+        configurable: true
+      });
+      Object.defineProperty(Function.prototype, "onceStrict", {
+        value: function() {
+          return onceStrict(this);
+        },
+        configurable: true
+      });
+    });
+    function once(e) {
+      var t = function() {
+        if (t.called) return t.value;
+        t.called = true;
+        return (t.value = e.apply(this, arguments));
+      };
+      t.called = false;
+      return t;
+    }
+    function onceStrict(e) {
+      var t = function() {
+        if (t.called) throw new Error(t.onceError);
+        t.called = true;
+        return (t.value = e.apply(this, arguments));
+      };
+      var r = e.name || "Function wrapped with `once`";
+      t.onceError = r + " shouldn't be called more than once";
+      t.called = false;
+      return t;
+    }
   },
   53: function(e, t, r) {
     e.exports = r(352);
@@ -847,9 +849,6 @@ module.exports = (function(e, t) {
       const e = await p.getMyStats({ range: i.LAST_7_DAYS });
       await updateGist(e);
     }
-    function trimRightStr(e, t) {
-      return e.length > t ? e.substring(0, t - 3) + "..." : e;
-    }
     async function updateGist(e) {
       let t;
       try {
@@ -862,7 +861,7 @@ module.exports = (function(e, t) {
         const n = e.data.languages[t];
         const { name: i, percent: s, text: o } = n;
         const a = [
-          trimRightStr(i, 10).padEnd(10),
+          i.padEnd(11),
           o.padEnd(14),
           generateBarChart(s, 21),
           String(s.toFixed(1)).padStart(5) + "%"
@@ -905,25 +904,28 @@ module.exports = (function(e, t) {
     "use strict";
     const n = r(87);
     const i = new Map([
-      [19, "Catalina"],
-      [18, "Mojave"],
-      [17, "High Sierra"],
-      [16, "Sierra"],
-      [15, "El Capitan"],
-      [14, "Yosemite"],
-      [13, "Mavericks"],
-      [12, "Mountain Lion"],
-      [11, "Lion"],
-      [10, "Snow Leopard"],
-      [9, "Leopard"],
-      [8, "Tiger"],
-      [7, "Panther"],
-      [6, "Jaguar"],
-      [5, "Puma"]
+      [21, ["Monterey", "12"]],
+      [20, ["Big Sur", "11"]],
+      [19, ["Catalina", "10.15"]],
+      [18, ["Mojave", "10.14"]],
+      [17, ["High Sierra", "10.13"]],
+      [16, ["Sierra", "10.12"]],
+      [15, ["El Capitan", "10.11"]],
+      [14, ["Yosemite", "10.10"]],
+      [13, ["Mavericks", "10.9"]],
+      [12, ["Mountain Lion", "10.8"]],
+      [11, ["Lion", "10.7"]],
+      [10, ["Snow Leopard", "10.6"]],
+      [9, ["Leopard", "10.5"]],
+      [8, ["Tiger", "10.4"]],
+      [7, ["Panther", "10.3"]],
+      [6, ["Jaguar", "10.2"]],
+      [5, ["Puma", "10.1"]]
     ]);
     const s = e => {
       e = Number((e || n.release()).split(".")[0]);
-      return { name: i.get(e), version: "10." + (e - 4) };
+      const [t, r] = i.get(e);
+      return { name: t, version: r };
     };
     e.exports = s;
     e.exports.default = s;
@@ -1529,38 +1531,19 @@ module.exports = (function(e, t) {
   },
   215: function(e) {
     e.exports = {
-      _args: [["@octokit/rest@16.36.0", "/Users/matan/dev/waka-box"]],
-      _from: "@octokit/rest@16.36.0",
-      _id: "@octokit/rest@16.36.0",
-      _inBundle: false,
-      _integrity:
-        "sha512-zoZj7Ya4vWBK4fjTwK2Cnmu7XBB1p9ygSvTk2TthN6DVJXM4hQZQoAiknWFLJWSTix4dnA3vuHtjPZbExYoCZA==",
-      _location: "/@octokit/rest",
-      _phantomChildren: {},
-      _requested: {
-        type: "version",
-        registry: true,
-        raw: "@octokit/rest@16.36.0",
-        name: "@octokit/rest",
-        escapedName: "@octokit%2frest",
-        scope: "@octokit",
-        rawSpec: "16.36.0",
-        saveSpec: null,
-        fetchSpec: "16.36.0"
-      },
-      _requiredBy: ["/"],
-      _resolved: "https://registry.npmjs.org/@octokit/rest/-/rest-16.36.0.tgz",
-      _spec: "16.36.0",
-      _where: "/Users/matan/dev/waka-box",
-      author: { name: "Gregor Martynus", url: "https://github.com/gr2m" },
-      bugs: { url: "https://github.com/octokit/rest.js/issues" },
-      bundlesize: [{ path: "./dist/octokit-rest.min.js.gz", maxSize: "33 kB" }],
+      name: "@octokit/rest",
+      version: "16.36.0",
+      publishConfig: { access: "public" },
+      description: "GitHub REST API client for Node.js",
+      keywords: ["octokit", "github", "rest", "api-client"],
+      author: "Gregor Martynus (https://github.com/gr2m)",
       contributors: [
         { name: "Mike de Boer", email: "info@mikedeboer.nl" },
         { name: "Fabian Jakobs", email: "fabian@c9.io" },
         { name: "Joe Gallo", email: "joe@brassafrax.com" },
         { name: "Gregor Martynus", url: "https://github.com/gr2m" }
       ],
+      repository: "https://github.com/octokit/rest.js",
       dependencies: {
         "@octokit/request": "^5.2.0",
         "@octokit/request-error": "^1.0.2",
@@ -1575,7 +1558,6 @@ module.exports = (function(e, t) {
         once: "^1.4.0",
         "universal-user-agent": "^4.0.0"
       },
-      description: "GitHub REST API client for Node.js",
       devDependencies: {
         "@gimenete/type-writer": "^0.1.3",
         "@octokit/fixtures-server": "^5.0.6",
@@ -1609,13 +1591,41 @@ module.exports = (function(e, t) {
         "webpack-bundle-analyzer": "^3.0.0",
         "webpack-cli": "^3.0.0"
       },
-      files: ["index.js", "index.d.ts", "lib", "plugins"],
-      homepage: "https://github.com/octokit/rest.js#readme",
-      keywords: ["octokit", "github", "rest", "api-client"],
+      types: "index.d.ts",
+      scripts: {
+        coverage: "nyc report --reporter=html && open coverage/index.html",
+        lint:
+          "prettier --check '{lib,plugins,scripts,test}/**/*.{js,json,ts}' 'docs/*.{js,json}' 'docs/src/**/*' index.js README.md package.json",
+        "lint:fix":
+          "prettier --write '{lib,plugins,scripts,test}/**/*.{js,json,ts}' 'docs/*.{js,json}' 'docs/src/**/*' index.js README.md package.json",
+        pretest: "npm run -s lint",
+        test: 'nyc mocha test/mocha-node-setup.js "test/*/**/*-test.js"',
+        "test:browser": "cypress run --browser chrome",
+        build: "npm-run-all build:*",
+        "build:ts": "npm run -s update-endpoints:typescript",
+        "prebuild:browser": "mkdirp dist/",
+        "build:browser": "npm-run-all build:browser:*",
+        "build:browser:development":
+          "webpack --mode development --entry . --output-library=Octokit --output=./dist/octokit-rest.js --profile --json > dist/bundle-stats.json",
+        "build:browser:production":
+          "webpack --mode production --entry . --plugin=compression-webpack-plugin --output-library=Octokit --output-path=./dist --output-filename=octokit-rest.min.js --devtool source-map",
+        "generate-bundle-report":
+          "webpack-bundle-analyzer dist/bundle-stats.json --mode=static --no-open --report dist/bundle-report.html",
+        "update-endpoints": "npm-run-all update-endpoints:*",
+        "update-endpoints:fetch-json":
+          "node scripts/update-endpoints/fetch-json",
+        "update-endpoints:code": "node scripts/update-endpoints/code",
+        "update-endpoints:typescript":
+          "node scripts/update-endpoints/typescript",
+        "prevalidate:ts": "npm run -s build:ts",
+        "validate:ts": "tsc --target es6 --noImplicitAny index.d.ts",
+        "postvalidate:ts":
+          "tsc --noEmit --target es6 test/typescript-validate.ts",
+        "start-fixtures-server": "octokit-fixtures-server"
+      },
       license: "MIT",
-      name: "@octokit/rest",
+      files: ["index.js", "index.d.ts", "lib", "plugins"],
       nyc: { ignore: ["test"] },
-      publishConfig: { access: "public" },
       release: {
         publish: [
           "@semantic-release/npm",
@@ -1625,43 +1635,7 @@ module.exports = (function(e, t) {
           }
         ]
       },
-      repository: {
-        type: "git",
-        url: "git+https://github.com/octokit/rest.js.git"
-      },
-      scripts: {
-        build: "npm-run-all build:*",
-        "build:browser": "npm-run-all build:browser:*",
-        "build:browser:development":
-          "webpack --mode development --entry . --output-library=Octokit --output=./dist/octokit-rest.js --profile --json > dist/bundle-stats.json",
-        "build:browser:production":
-          "webpack --mode production --entry . --plugin=compression-webpack-plugin --output-library=Octokit --output-path=./dist --output-filename=octokit-rest.min.js --devtool source-map",
-        "build:ts": "npm run -s update-endpoints:typescript",
-        coverage: "nyc report --reporter=html && open coverage/index.html",
-        "generate-bundle-report":
-          "webpack-bundle-analyzer dist/bundle-stats.json --mode=static --no-open --report dist/bundle-report.html",
-        lint:
-          "prettier --check '{lib,plugins,scripts,test}/**/*.{js,json,ts}' 'docs/*.{js,json}' 'docs/src/**/*' index.js README.md package.json",
-        "lint:fix":
-          "prettier --write '{lib,plugins,scripts,test}/**/*.{js,json,ts}' 'docs/*.{js,json}' 'docs/src/**/*' index.js README.md package.json",
-        "postvalidate:ts":
-          "tsc --noEmit --target es6 test/typescript-validate.ts",
-        "prebuild:browser": "mkdirp dist/",
-        pretest: "npm run -s lint",
-        "prevalidate:ts": "npm run -s build:ts",
-        "start-fixtures-server": "octokit-fixtures-server",
-        test: 'nyc mocha test/mocha-node-setup.js "test/*/**/*-test.js"',
-        "test:browser": "cypress run --browser chrome",
-        "update-endpoints": "npm-run-all update-endpoints:*",
-        "update-endpoints:code": "node scripts/update-endpoints/code",
-        "update-endpoints:fetch-json":
-          "node scripts/update-endpoints/fetch-json",
-        "update-endpoints:typescript":
-          "node scripts/update-endpoints/typescript",
-        "validate:ts": "tsc --target es6 --noImplicitAny index.d.ts"
-      },
-      types: "index.d.ts",
-      version: "16.36.0"
+      bundlesize: [{ path: "./dist/octokit-rest.min.js.gz", maxSize: "33 kB" }]
     };
   },
   219: function(e, t, r) {
@@ -1899,24 +1873,88 @@ module.exports = (function(e, t) {
       e.registerEndpoints = n.bind(null, e);
     }
   },
+  257: function(e, t, r) {
+    "use strict";
+    Object.defineProperty(t, "__esModule", { value: true });
+    function _interopDefault(e) {
+      return e && typeof e === "object" && "default" in e ? e["default"] : e;
+    }
+    var n = r(692);
+    var i = _interopDefault(r(49));
+    const s = i(e => console.warn(e));
+    const o = i(e => console.warn(e));
+    class RequestError extends Error {
+      constructor(e, t, r) {
+        super(e);
+        if (Error.captureStackTrace) {
+          Error.captureStackTrace(this, this.constructor);
+        }
+        this.name = "HttpError";
+        this.status = t;
+        let i;
+        if ("headers" in r && typeof r.headers !== "undefined") {
+          i = r.headers;
+        }
+        if ("response" in r) {
+          this.response = r.response;
+          i = r.response.headers;
+        }
+        const a = Object.assign({}, r.request);
+        if (r.request.headers.authorization) {
+          a.headers = Object.assign({}, r.request.headers, {
+            authorization: r.request.headers.authorization.replace(
+              / .*$/,
+              " [REDACTED]"
+            )
+          });
+        }
+        a.url = a.url
+          .replace(/\bclient_secret=\w+/g, "client_secret=[REDACTED]")
+          .replace(/\baccess_token=\w+/g, "access_token=[REDACTED]");
+        this.request = a;
+        Object.defineProperty(this, "code", {
+          get() {
+            s(
+              new n.Deprecation(
+                "[@octokit/request-error] `error.code` is deprecated, use `error.status`."
+              )
+            );
+            return t;
+          }
+        });
+        Object.defineProperty(this, "headers", {
+          get() {
+            o(
+              new n.Deprecation(
+                "[@octokit/request-error] `error.headers` is deprecated, use `error.response.headers`."
+              )
+            );
+            return i || {};
+          }
+        });
+      }
+    }
+    t.RequestError = RequestError;
+  },
   260: function(e, t, r) {
     var n = r(357);
     var i = r(654);
-    var s = r(614);
-    if (typeof s !== "function") {
-      s = s.EventEmitter;
+    var s = /^win/i.test(process.platform);
+    var o = r(614);
+    if (typeof o !== "function") {
+      o = o.EventEmitter;
     }
-    var o;
+    var a;
     if (process.__signal_exit_emitter__) {
-      o = process.__signal_exit_emitter__;
+      a = process.__signal_exit_emitter__;
     } else {
-      o = process.__signal_exit_emitter__ = new s();
-      o.count = 0;
-      o.emitted = {};
+      a = process.__signal_exit_emitter__ = new o();
+      a.count = 0;
+      a.emitted = {};
     }
-    if (!o.infinite) {
-      o.setMaxListeners(Infinity);
-      o.infinite = true;
+    if (!a.infinite) {
+      a.setMaxListeners(Infinity);
+      a.infinite = true;
     }
     e.exports = function(e, t) {
       n.equal(
@@ -1924,7 +1962,7 @@ module.exports = (function(e, t) {
         "function",
         "a callback must be provided for exit handler"
       );
-      if (u === false) {
+      if (p === false) {
         load();
       }
       var r = "exit";
@@ -1932,47 +1970,50 @@ module.exports = (function(e, t) {
         r = "afterexit";
       }
       var i = function() {
-        o.removeListener(r, e);
+        a.removeListener(r, e);
         if (
-          o.listeners("exit").length === 0 &&
-          o.listeners("afterexit").length === 0
+          a.listeners("exit").length === 0 &&
+          a.listeners("afterexit").length === 0
         ) {
           unload();
         }
       };
-      o.on(r, e);
+      a.on(r, e);
       return i;
     };
     e.exports.unload = unload;
     function unload() {
-      if (!u) {
+      if (!p) {
         return;
       }
-      u = false;
+      p = false;
       i.forEach(function(e) {
         try {
-          process.removeListener(e, a[e]);
+          process.removeListener(e, u[e]);
         } catch (e) {}
       });
-      process.emit = c;
-      process.reallyExit = p;
-      o.count -= 1;
+      process.emit = d;
+      process.reallyExit = c;
+      a.count -= 1;
     }
     function emit(e, t, r) {
-      if (o.emitted[e]) {
+      if (a.emitted[e]) {
         return;
       }
-      o.emitted[e] = true;
-      o.emit(e, t, r);
+      a.emitted[e] = true;
+      a.emit(e, t, r);
     }
-    var a = {};
+    var u = {};
     i.forEach(function(e) {
-      a[e] = function listener() {
+      u[e] = function listener() {
         var t = process.listeners(e);
-        if (t.length === o.count) {
+        if (t.length === a.count) {
           unload();
           emit("exit", null, e);
           emit("afterexit", null, e);
+          if (s && e === "SIGHUP") {
+            e = "SIGINT";
+          }
           process.kill(process.pid, e);
         }
       };
@@ -1981,16 +2022,16 @@ module.exports = (function(e, t) {
       return i;
     };
     e.exports.load = load;
-    var u = false;
+    var p = false;
     function load() {
-      if (u) {
+      if (p) {
         return;
       }
-      u = true;
-      o.count += 1;
+      p = true;
+      a.count += 1;
       i = i.filter(function(e) {
         try {
-          process.on(e, a[e]);
+          process.on(e, u[e]);
           return true;
         } catch (e) {
           return false;
@@ -1999,25 +2040,25 @@ module.exports = (function(e, t) {
       process.emit = processEmit;
       process.reallyExit = processReallyExit;
     }
-    var p = process.reallyExit;
+    var c = process.reallyExit;
     function processReallyExit(e) {
       process.exitCode = e || 0;
       emit("exit", process.exitCode, null);
       emit("afterexit", process.exitCode, null);
-      p.call(process, process.exitCode);
+      c.call(process, process.exitCode);
     }
-    var c = process.emit;
+    var d = process.emit;
     function processEmit(e, t) {
       if (e === "exit") {
         if (t !== undefined) {
           process.exitCode = t;
         }
-        var r = c.apply(this, arguments);
+        var r = d.apply(this, arguments);
         emit("exit", process.exitCode, null);
         emit("afterexit", process.exitCode, null);
         return r;
       } else {
-        return c.apply(this, arguments);
+        return d.apply(this, arguments);
       }
     }
   },
@@ -2054,1180 +2095,28 @@ module.exports = (function(e, t) {
       return t;
     }
   },
-  280: function(e, t) {
-    t = e.exports = SemVer;
-    var r;
-    if (
-      typeof process === "object" &&
-      process.env &&
-      process.env.NODE_DEBUG &&
-      /\bsemver\b/i.test(process.env.NODE_DEBUG)
-    ) {
-      r = function() {
-        var e = Array.prototype.slice.call(arguments, 0);
-        e.unshift("SEMVER");
-        console.log.apply(console, e);
-      };
-    } else {
-      r = function() {};
-    }
-    t.SEMVER_SPEC_VERSION = "2.0.0";
-    var n = 256;
-    var i = Number.MAX_SAFE_INTEGER || 9007199254740991;
-    var s = 16;
-    var o = (t.re = []);
-    var a = (t.src = []);
-    var u = 0;
-    var p = u++;
-    a[p] = "0|[1-9]\\d*";
-    var c = u++;
-    a[c] = "[0-9]+";
-    var d = u++;
-    a[d] = "\\d*[a-zA-Z-][a-zA-Z0-9-]*";
-    var l = u++;
-    a[l] = "(" + a[p] + ")\\." + "(" + a[p] + ")\\." + "(" + a[p] + ")";
-    var g = u++;
-    a[g] = "(" + a[c] + ")\\." + "(" + a[c] + ")\\." + "(" + a[c] + ")";
-    var m = u++;
-    a[m] = "(?:" + a[p] + "|" + a[d] + ")";
-    var h = u++;
-    a[h] = "(?:" + a[c] + "|" + a[d] + ")";
-    var f = u++;
-    a[f] = "(?:-(" + a[m] + "(?:\\." + a[m] + ")*))";
-    var y = u++;
-    a[y] = "(?:-?(" + a[h] + "(?:\\." + a[h] + ")*))";
-    var b = u++;
-    a[b] = "[0-9A-Za-z-]+";
-    var _ = u++;
-    a[_] = "(?:\\+(" + a[b] + "(?:\\." + a[b] + ")*))";
-    var w = u++;
-    var q = "v?" + a[l] + a[f] + "?" + a[_] + "?";
-    a[w] = "^" + q + "$";
-    var v = "[v=\\s]*" + a[g] + a[y] + "?" + a[_] + "?";
-    var E = u++;
-    a[E] = "^" + v + "$";
-    var T = u++;
-    a[T] = "((?:<|>)?=?)";
-    var C = u++;
-    a[C] = a[c] + "|x|X|\\*";
-    var j = u++;
-    a[j] = a[p] + "|x|X|\\*";
-    var S = u++;
-    a[S] =
-      "[v=\\s]*(" +
-      a[j] +
-      ")" +
-      "(?:\\.(" +
-      a[j] +
-      ")" +
-      "(?:\\.(" +
-      a[j] +
-      ")" +
-      "(?:" +
-      a[f] +
-      ")?" +
-      a[_] +
-      "?" +
-      ")?)?";
-    var x = u++;
-    a[x] =
-      "[v=\\s]*(" +
-      a[C] +
-      ")" +
-      "(?:\\.(" +
-      a[C] +
-      ")" +
-      "(?:\\.(" +
-      a[C] +
-      ")" +
-      "(?:" +
-      a[y] +
-      ")?" +
-      a[_] +
-      "?" +
-      ")?)?";
-    var k = u++;
-    a[k] = "^" + a[T] + "\\s*" + a[S] + "$";
-    var O = u++;
-    a[O] = "^" + a[T] + "\\s*" + a[x] + "$";
-    var P = u++;
-    a[P] =
-      "(?:^|[^\\d])" +
-      "(\\d{1," +
-      s +
-      "})" +
-      "(?:\\.(\\d{1," +
-      s +
-      "}))?" +
-      "(?:\\.(\\d{1," +
-      s +
-      "}))?" +
-      "(?:$|[^\\d])";
-    var A = u++;
-    a[A] = "(?:~>?)";
-    var R = u++;
-    a[R] = "(\\s*)" + a[A] + "\\s+";
-    o[R] = new RegExp(a[R], "g");
-    var G = "$1~";
-    var F = u++;
-    a[F] = "^" + a[A] + a[S] + "$";
-    var B = u++;
-    a[B] = "^" + a[A] + a[x] + "$";
-    var D = u++;
-    a[D] = "(?:\\^)";
-    var L = u++;
-    a[L] = "(\\s*)" + a[D] + "\\s+";
-    o[L] = new RegExp(a[L], "g");
-    var U = "$1^";
-    var I = u++;
-    a[I] = "^" + a[D] + a[S] + "$";
-    var $ = u++;
-    a[$] = "^" + a[D] + a[x] + "$";
-    var H = u++;
-    a[H] = "^" + a[T] + "\\s*(" + v + ")$|^$";
-    var z = u++;
-    a[z] = "^" + a[T] + "\\s*(" + q + ")$|^$";
-    var N = u++;
-    a[N] = "(\\s*)" + a[T] + "\\s*(" + v + "|" + a[S] + ")";
-    o[N] = new RegExp(a[N], "g");
-    var V = "$1$2$3";
-    var K = u++;
-    a[K] = "^\\s*(" + a[S] + ")" + "\\s+-\\s+" + "(" + a[S] + ")" + "\\s*$";
-    var W = u++;
-    a[W] = "^\\s*(" + a[x] + ")" + "\\s+-\\s+" + "(" + a[x] + ")" + "\\s*$";
-    var X = u++;
-    a[X] = "(<|>)?=?\\s*\\*";
-    for (var Y = 0; Y < u; Y++) {
-      r(Y, a[Y]);
-      if (!o[Y]) {
-        o[Y] = new RegExp(a[Y]);
+  280: function(e) {
+    e.exports = register;
+    function register(e, t, r, n) {
+      if (typeof r !== "function") {
+        throw new Error("method for before hook must be a function");
       }
-    }
-    t.parse = parse;
-    function parse(e, t) {
-      if (!t || typeof t !== "object") {
-        t = { loose: !!t, includePrerelease: false };
+      if (!n) {
+        n = {};
       }
-      if (e instanceof SemVer) {
-        return e;
+      if (Array.isArray(t)) {
+        return t.reverse().reduce(function(t, r) {
+          return register.bind(null, e, r, t, n);
+        }, r)();
       }
-      if (typeof e !== "string") {
-        return null;
-      }
-      if (e.length > n) {
-        return null;
-      }
-      var r = t.loose ? o[E] : o[w];
-      if (!r.test(e)) {
-        return null;
-      }
-      try {
-        return new SemVer(e, t);
-      } catch (e) {
-        return null;
-      }
-    }
-    t.valid = valid;
-    function valid(e, t) {
-      var r = parse(e, t);
-      return r ? r.version : null;
-    }
-    t.clean = clean;
-    function clean(e, t) {
-      var r = parse(e.trim().replace(/^[=v]+/, ""), t);
-      return r ? r.version : null;
-    }
-    t.SemVer = SemVer;
-    function SemVer(e, t) {
-      if (!t || typeof t !== "object") {
-        t = { loose: !!t, includePrerelease: false };
-      }
-      if (e instanceof SemVer) {
-        if (e.loose === t.loose) {
-          return e;
-        } else {
-          e = e.version;
+      return Promise.resolve().then(function() {
+        if (!e.registry[t]) {
+          return r(n);
         }
-      } else if (typeof e !== "string") {
-        throw new TypeError("Invalid Version: " + e);
-      }
-      if (e.length > n) {
-        throw new TypeError("version is longer than " + n + " characters");
-      }
-      if (!(this instanceof SemVer)) {
-        return new SemVer(e, t);
-      }
-      r("SemVer", e, t);
-      this.options = t;
-      this.loose = !!t.loose;
-      var s = e.trim().match(t.loose ? o[E] : o[w]);
-      if (!s) {
-        throw new TypeError("Invalid Version: " + e);
-      }
-      this.raw = e;
-      this.major = +s[1];
-      this.minor = +s[2];
-      this.patch = +s[3];
-      if (this.major > i || this.major < 0) {
-        throw new TypeError("Invalid major version");
-      }
-      if (this.minor > i || this.minor < 0) {
-        throw new TypeError("Invalid minor version");
-      }
-      if (this.patch > i || this.patch < 0) {
-        throw new TypeError("Invalid patch version");
-      }
-      if (!s[4]) {
-        this.prerelease = [];
-      } else {
-        this.prerelease = s[4].split(".").map(function(e) {
-          if (/^[0-9]+$/.test(e)) {
-            var t = +e;
-            if (t >= 0 && t < i) {
-              return t;
-            }
-          }
-          return e;
-        });
-      }
-      this.build = s[5] ? s[5].split(".") : [];
-      this.format();
-    }
-    SemVer.prototype.format = function() {
-      this.version = this.major + "." + this.minor + "." + this.patch;
-      if (this.prerelease.length) {
-        this.version += "-" + this.prerelease.join(".");
-      }
-      return this.version;
-    };
-    SemVer.prototype.toString = function() {
-      return this.version;
-    };
-    SemVer.prototype.compare = function(e) {
-      r("SemVer.compare", this.version, this.options, e);
-      if (!(e instanceof SemVer)) {
-        e = new SemVer(e, this.options);
-      }
-      return this.compareMain(e) || this.comparePre(e);
-    };
-    SemVer.prototype.compareMain = function(e) {
-      if (!(e instanceof SemVer)) {
-        e = new SemVer(e, this.options);
-      }
-      return (
-        compareIdentifiers(this.major, e.major) ||
-        compareIdentifiers(this.minor, e.minor) ||
-        compareIdentifiers(this.patch, e.patch)
-      );
-    };
-    SemVer.prototype.comparePre = function(e) {
-      if (!(e instanceof SemVer)) {
-        e = new SemVer(e, this.options);
-      }
-      if (this.prerelease.length && !e.prerelease.length) {
-        return -1;
-      } else if (!this.prerelease.length && e.prerelease.length) {
-        return 1;
-      } else if (!this.prerelease.length && !e.prerelease.length) {
-        return 0;
-      }
-      var t = 0;
-      do {
-        var n = this.prerelease[t];
-        var i = e.prerelease[t];
-        r("prerelease compare", t, n, i);
-        if (n === undefined && i === undefined) {
-          return 0;
-        } else if (i === undefined) {
-          return 1;
-        } else if (n === undefined) {
-          return -1;
-        } else if (n === i) {
-          continue;
-        } else {
-          return compareIdentifiers(n, i);
-        }
-      } while (++t);
-    };
-    SemVer.prototype.inc = function(e, t) {
-      switch (e) {
-        case "premajor":
-          this.prerelease.length = 0;
-          this.patch = 0;
-          this.minor = 0;
-          this.major++;
-          this.inc("pre", t);
-          break;
-        case "preminor":
-          this.prerelease.length = 0;
-          this.patch = 0;
-          this.minor++;
-          this.inc("pre", t);
-          break;
-        case "prepatch":
-          this.prerelease.length = 0;
-          this.inc("patch", t);
-          this.inc("pre", t);
-          break;
-        case "prerelease":
-          if (this.prerelease.length === 0) {
-            this.inc("patch", t);
-          }
-          this.inc("pre", t);
-          break;
-        case "major":
-          if (
-            this.minor !== 0 ||
-            this.patch !== 0 ||
-            this.prerelease.length === 0
-          ) {
-            this.major++;
-          }
-          this.minor = 0;
-          this.patch = 0;
-          this.prerelease = [];
-          break;
-        case "minor":
-          if (this.patch !== 0 || this.prerelease.length === 0) {
-            this.minor++;
-          }
-          this.patch = 0;
-          this.prerelease = [];
-          break;
-        case "patch":
-          if (this.prerelease.length === 0) {
-            this.patch++;
-          }
-          this.prerelease = [];
-          break;
-        case "pre":
-          if (this.prerelease.length === 0) {
-            this.prerelease = [0];
-          } else {
-            var r = this.prerelease.length;
-            while (--r >= 0) {
-              if (typeof this.prerelease[r] === "number") {
-                this.prerelease[r]++;
-                r = -2;
-              }
-            }
-            if (r === -1) {
-              this.prerelease.push(0);
-            }
-          }
-          if (t) {
-            if (this.prerelease[0] === t) {
-              if (isNaN(this.prerelease[1])) {
-                this.prerelease = [t, 0];
-              }
-            } else {
-              this.prerelease = [t, 0];
-            }
-          }
-          break;
-        default:
-          throw new Error("invalid increment argument: " + e);
-      }
-      this.format();
-      this.raw = this.version;
-      return this;
-    };
-    t.inc = inc;
-    function inc(e, t, r, n) {
-      if (typeof r === "string") {
-        n = r;
-        r = undefined;
-      }
-      try {
-        return new SemVer(e, r).inc(t, n).version;
-      } catch (e) {
-        return null;
-      }
-    }
-    t.diff = diff;
-    function diff(e, t) {
-      if (eq(e, t)) {
-        return null;
-      } else {
-        var r = parse(e);
-        var n = parse(t);
-        var i = "";
-        if (r.prerelease.length || n.prerelease.length) {
-          i = "pre";
-          var s = "prerelease";
-        }
-        for (var o in r) {
-          if (o === "major" || o === "minor" || o === "patch") {
-            if (r[o] !== n[o]) {
-              return i + o;
-            }
-          }
-        }
-        return s;
-      }
-    }
-    t.compareIdentifiers = compareIdentifiers;
-    var J = /^[0-9]+$/;
-    function compareIdentifiers(e, t) {
-      var r = J.test(e);
-      var n = J.test(t);
-      if (r && n) {
-        e = +e;
-        t = +t;
-      }
-      return e === t ? 0 : r && !n ? -1 : n && !r ? 1 : e < t ? -1 : 1;
-    }
-    t.rcompareIdentifiers = rcompareIdentifiers;
-    function rcompareIdentifiers(e, t) {
-      return compareIdentifiers(t, e);
-    }
-    t.major = major;
-    function major(e, t) {
-      return new SemVer(e, t).major;
-    }
-    t.minor = minor;
-    function minor(e, t) {
-      return new SemVer(e, t).minor;
-    }
-    t.patch = patch;
-    function patch(e, t) {
-      return new SemVer(e, t).patch;
-    }
-    t.compare = compare;
-    function compare(e, t, r) {
-      return new SemVer(e, r).compare(new SemVer(t, r));
-    }
-    t.compareLoose = compareLoose;
-    function compareLoose(e, t) {
-      return compare(e, t, true);
-    }
-    t.rcompare = rcompare;
-    function rcompare(e, t, r) {
-      return compare(t, e, r);
-    }
-    t.sort = sort;
-    function sort(e, r) {
-      return e.sort(function(e, n) {
-        return t.compare(e, n, r);
+        return e.registry[t].reduce(function(e, t) {
+          return t.hook.bind(null, e, n);
+        }, r)();
       });
-    }
-    t.rsort = rsort;
-    function rsort(e, r) {
-      return e.sort(function(e, n) {
-        return t.rcompare(e, n, r);
-      });
-    }
-    t.gt = gt;
-    function gt(e, t, r) {
-      return compare(e, t, r) > 0;
-    }
-    t.lt = lt;
-    function lt(e, t, r) {
-      return compare(e, t, r) < 0;
-    }
-    t.eq = eq;
-    function eq(e, t, r) {
-      return compare(e, t, r) === 0;
-    }
-    t.neq = neq;
-    function neq(e, t, r) {
-      return compare(e, t, r) !== 0;
-    }
-    t.gte = gte;
-    function gte(e, t, r) {
-      return compare(e, t, r) >= 0;
-    }
-    t.lte = lte;
-    function lte(e, t, r) {
-      return compare(e, t, r) <= 0;
-    }
-    t.cmp = cmp;
-    function cmp(e, t, r, n) {
-      switch (t) {
-        case "===":
-          if (typeof e === "object") e = e.version;
-          if (typeof r === "object") r = r.version;
-          return e === r;
-        case "!==":
-          if (typeof e === "object") e = e.version;
-          if (typeof r === "object") r = r.version;
-          return e !== r;
-        case "":
-        case "=":
-        case "==":
-          return eq(e, r, n);
-        case "!=":
-          return neq(e, r, n);
-        case ">":
-          return gt(e, r, n);
-        case ">=":
-          return gte(e, r, n);
-        case "<":
-          return lt(e, r, n);
-        case "<=":
-          return lte(e, r, n);
-        default:
-          throw new TypeError("Invalid operator: " + t);
-      }
-    }
-    t.Comparator = Comparator;
-    function Comparator(e, t) {
-      if (!t || typeof t !== "object") {
-        t = { loose: !!t, includePrerelease: false };
-      }
-      if (e instanceof Comparator) {
-        if (e.loose === !!t.loose) {
-          return e;
-        } else {
-          e = e.value;
-        }
-      }
-      if (!(this instanceof Comparator)) {
-        return new Comparator(e, t);
-      }
-      r("comparator", e, t);
-      this.options = t;
-      this.loose = !!t.loose;
-      this.parse(e);
-      if (this.semver === Z) {
-        this.value = "";
-      } else {
-        this.value = this.operator + this.semver.version;
-      }
-      r("comp", this);
-    }
-    var Z = {};
-    Comparator.prototype.parse = function(e) {
-      var t = this.options.loose ? o[H] : o[z];
-      var r = e.match(t);
-      if (!r) {
-        throw new TypeError("Invalid comparator: " + e);
-      }
-      this.operator = r[1];
-      if (this.operator === "=") {
-        this.operator = "";
-      }
-      if (!r[2]) {
-        this.semver = Z;
-      } else {
-        this.semver = new SemVer(r[2], this.options.loose);
-      }
-    };
-    Comparator.prototype.toString = function() {
-      return this.value;
-    };
-    Comparator.prototype.test = function(e) {
-      r("Comparator.test", e, this.options.loose);
-      if (this.semver === Z) {
-        return true;
-      }
-      if (typeof e === "string") {
-        e = new SemVer(e, this.options);
-      }
-      return cmp(e, this.operator, this.semver, this.options);
-    };
-    Comparator.prototype.intersects = function(e, t) {
-      if (!(e instanceof Comparator)) {
-        throw new TypeError("a Comparator is required");
-      }
-      if (!t || typeof t !== "object") {
-        t = { loose: !!t, includePrerelease: false };
-      }
-      var r;
-      if (this.operator === "") {
-        r = new Range(e.value, t);
-        return satisfies(this.value, r, t);
-      } else if (e.operator === "") {
-        r = new Range(this.value, t);
-        return satisfies(e.semver, r, t);
-      }
-      var n =
-        (this.operator === ">=" || this.operator === ">") &&
-        (e.operator === ">=" || e.operator === ">");
-      var i =
-        (this.operator === "<=" || this.operator === "<") &&
-        (e.operator === "<=" || e.operator === "<");
-      var s = this.semver.version === e.semver.version;
-      var o =
-        (this.operator === ">=" || this.operator === "<=") &&
-        (e.operator === ">=" || e.operator === "<=");
-      var a =
-        cmp(this.semver, "<", e.semver, t) &&
-        (this.operator === ">=" || this.operator === ">") &&
-          (e.operator === "<=" || e.operator === "<");
-      var u =
-        cmp(this.semver, ">", e.semver, t) &&
-        (this.operator === "<=" || this.operator === "<") &&
-          (e.operator === ">=" || e.operator === ">");
-      return n || i || (s && o) || a || u;
-    };
-    t.Range = Range;
-    function Range(e, t) {
-      if (!t || typeof t !== "object") {
-        t = { loose: !!t, includePrerelease: false };
-      }
-      if (e instanceof Range) {
-        if (
-          e.loose === !!t.loose &&
-          e.includePrerelease === !!t.includePrerelease
-        ) {
-          return e;
-        } else {
-          return new Range(e.raw, t);
-        }
-      }
-      if (e instanceof Comparator) {
-        return new Range(e.value, t);
-      }
-      if (!(this instanceof Range)) {
-        return new Range(e, t);
-      }
-      this.options = t;
-      this.loose = !!t.loose;
-      this.includePrerelease = !!t.includePrerelease;
-      this.raw = e;
-      this.set = e
-        .split(/\s*\|\|\s*/)
-        .map(function(e) {
-          return this.parseRange(e.trim());
-        }, this)
-        .filter(function(e) {
-          return e.length;
-        });
-      if (!this.set.length) {
-        throw new TypeError("Invalid SemVer Range: " + e);
-      }
-      this.format();
-    }
-    Range.prototype.format = function() {
-      this.range = this.set
-        .map(function(e) {
-          return e.join(" ").trim();
-        })
-        .join("||")
-        .trim();
-      return this.range;
-    };
-    Range.prototype.toString = function() {
-      return this.range;
-    };
-    Range.prototype.parseRange = function(e) {
-      var t = this.options.loose;
-      e = e.trim();
-      var n = t ? o[W] : o[K];
-      e = e.replace(n, hyphenReplace);
-      r("hyphen replace", e);
-      e = e.replace(o[N], V);
-      r("comparator trim", e, o[N]);
-      e = e.replace(o[R], G);
-      e = e.replace(o[L], U);
-      e = e.split(/\s+/).join(" ");
-      var i = t ? o[H] : o[z];
-      var s = e
-        .split(" ")
-        .map(function(e) {
-          return parseComparator(e, this.options);
-        }, this)
-        .join(" ")
-        .split(/\s+/);
-      if (this.options.loose) {
-        s = s.filter(function(e) {
-          return !!e.match(i);
-        });
-      }
-      s = s.map(function(e) {
-        return new Comparator(e, this.options);
-      }, this);
-      return s;
-    };
-    Range.prototype.intersects = function(e, t) {
-      if (!(e instanceof Range)) {
-        throw new TypeError("a Range is required");
-      }
-      return this.set.some(function(r) {
-        return r.every(function(r) {
-          return e.set.some(function(e) {
-            return e.every(function(e) {
-              return r.intersects(e, t);
-            });
-          });
-        });
-      });
-    };
-    t.toComparators = toComparators;
-    function toComparators(e, t) {
-      return new Range(e, t).set.map(function(e) {
-        return e
-          .map(function(e) {
-            return e.value;
-          })
-          .join(" ")
-          .trim()
-          .split(" ");
-      });
-    }
-    function parseComparator(e, t) {
-      r("comp", e, t);
-      e = replaceCarets(e, t);
-      r("caret", e);
-      e = replaceTildes(e, t);
-      r("tildes", e);
-      e = replaceXRanges(e, t);
-      r("xrange", e);
-      e = replaceStars(e, t);
-      r("stars", e);
-      return e;
-    }
-    function isX(e) {
-      return !e || e.toLowerCase() === "x" || e === "*";
-    }
-    function replaceTildes(e, t) {
-      return e
-        .trim()
-        .split(/\s+/)
-        .map(function(e) {
-          return replaceTilde(e, t);
-        })
-        .join(" ");
-    }
-    function replaceTilde(e, t) {
-      var n = t.loose ? o[B] : o[F];
-      return e.replace(n, function(t, n, i, s, o) {
-        r("tilde", e, t, n, i, s, o);
-        var a;
-        if (isX(n)) {
-          a = "";
-        } else if (isX(i)) {
-          a = ">=" + n + ".0.0 <" + (+n + 1) + ".0.0";
-        } else if (isX(s)) {
-          a = ">=" + n + "." + i + ".0 <" + n + "." + (+i + 1) + ".0";
-        } else if (o) {
-          r("replaceTilde pr", o);
-          a =
-            ">=" +
-            n +
-            "." +
-            i +
-            "." +
-            s +
-            "-" +
-            o +
-            " <" +
-            n +
-            "." +
-            (+i + 1) +
-            ".0";
-        } else {
-          a = ">=" + n + "." + i + "." + s + " <" + n + "." + (+i + 1) + ".0";
-        }
-        r("tilde return", a);
-        return a;
-      });
-    }
-    function replaceCarets(e, t) {
-      return e
-        .trim()
-        .split(/\s+/)
-        .map(function(e) {
-          return replaceCaret(e, t);
-        })
-        .join(" ");
-    }
-    function replaceCaret(e, t) {
-      r("caret", e, t);
-      var n = t.loose ? o[$] : o[I];
-      return e.replace(n, function(t, n, i, s, o) {
-        r("caret", e, t, n, i, s, o);
-        var a;
-        if (isX(n)) {
-          a = "";
-        } else if (isX(i)) {
-          a = ">=" + n + ".0.0 <" + (+n + 1) + ".0.0";
-        } else if (isX(s)) {
-          if (n === "0") {
-            a = ">=" + n + "." + i + ".0 <" + n + "." + (+i + 1) + ".0";
-          } else {
-            a = ">=" + n + "." + i + ".0 <" + (+n + 1) + ".0.0";
-          }
-        } else if (o) {
-          r("replaceCaret pr", o);
-          if (n === "0") {
-            if (i === "0") {
-              a =
-                ">=" +
-                n +
-                "." +
-                i +
-                "." +
-                s +
-                "-" +
-                o +
-                " <" +
-                n +
-                "." +
-                i +
-                "." +
-                (+s + 1);
-            } else {
-              a =
-                ">=" +
-                n +
-                "." +
-                i +
-                "." +
-                s +
-                "-" +
-                o +
-                " <" +
-                n +
-                "." +
-                (+i + 1) +
-                ".0";
-            }
-          } else {
-            a =
-              ">=" + n + "." + i + "." + s + "-" + o + " <" + (+n + 1) + ".0.0";
-          }
-        } else {
-          r("no pr");
-          if (n === "0") {
-            if (i === "0") {
-              a =
-                ">=" +
-                n +
-                "." +
-                i +
-                "." +
-                s +
-                " <" +
-                n +
-                "." +
-                i +
-                "." +
-                (+s + 1);
-            } else {
-              a =
-                ">=" + n + "." + i + "." + s + " <" + n + "." + (+i + 1) + ".0";
-            }
-          } else {
-            a = ">=" + n + "." + i + "." + s + " <" + (+n + 1) + ".0.0";
-          }
-        }
-        r("caret return", a);
-        return a;
-      });
-    }
-    function replaceXRanges(e, t) {
-      r("replaceXRanges", e, t);
-      return e
-        .split(/\s+/)
-        .map(function(e) {
-          return replaceXRange(e, t);
-        })
-        .join(" ");
-    }
-    function replaceXRange(e, t) {
-      e = e.trim();
-      var n = t.loose ? o[O] : o[k];
-      return e.replace(n, function(t, n, i, s, o, a) {
-        r("xRange", e, t, n, i, s, o, a);
-        var u = isX(i);
-        var p = u || isX(s);
-        var c = p || isX(o);
-        var d = c;
-        if (n === "=" && d) {
-          n = "";
-        }
-        if (u) {
-          if (n === ">" || n === "<") {
-            t = "<0.0.0";
-          } else {
-            t = "*";
-          }
-        } else if (n && d) {
-          if (p) {
-            s = 0;
-          }
-          o = 0;
-          if (n === ">") {
-            n = ">=";
-            if (p) {
-              i = +i + 1;
-              s = 0;
-              o = 0;
-            } else {
-              s = +s + 1;
-              o = 0;
-            }
-          } else if (n === "<=") {
-            n = "<";
-            if (p) {
-              i = +i + 1;
-            } else {
-              s = +s + 1;
-            }
-          }
-          t = n + i + "." + s + "." + o;
-        } else if (p) {
-          t = ">=" + i + ".0.0 <" + (+i + 1) + ".0.0";
-        } else if (c) {
-          t = ">=" + i + "." + s + ".0 <" + i + "." + (+s + 1) + ".0";
-        }
-        r("xRange return", t);
-        return t;
-      });
-    }
-    function replaceStars(e, t) {
-      r("replaceStars", e, t);
-      return e.trim().replace(o[X], "");
-    }
-    function hyphenReplace(e, t, r, n, i, s, o, a, u, p, c, d, l) {
-      if (isX(r)) {
-        t = "";
-      } else if (isX(n)) {
-        t = ">=" + r + ".0.0";
-      } else if (isX(i)) {
-        t = ">=" + r + "." + n + ".0";
-      } else {
-        t = ">=" + t;
-      }
-      if (isX(u)) {
-        a = "";
-      } else if (isX(p)) {
-        a = "<" + (+u + 1) + ".0.0";
-      } else if (isX(c)) {
-        a = "<" + u + "." + (+p + 1) + ".0";
-      } else if (d) {
-        a = "<=" + u + "." + p + "." + c + "-" + d;
-      } else {
-        a = "<=" + a;
-      }
-      return (t + " " + a).trim();
-    }
-    Range.prototype.test = function(e) {
-      if (!e) {
-        return false;
-      }
-      if (typeof e === "string") {
-        e = new SemVer(e, this.options);
-      }
-      for (var t = 0; t < this.set.length; t++) {
-        if (testSet(this.set[t], e, this.options)) {
-          return true;
-        }
-      }
-      return false;
-    };
-    function testSet(e, t, n) {
-      for (var i = 0; i < e.length; i++) {
-        if (!e[i].test(t)) {
-          return false;
-        }
-      }
-      if (t.prerelease.length && !n.includePrerelease) {
-        for (i = 0; i < e.length; i++) {
-          r(e[i].semver);
-          if (e[i].semver === Z) {
-            continue;
-          }
-          if (e[i].semver.prerelease.length > 0) {
-            var s = e[i].semver;
-            if (
-              s.major === t.major &&
-              s.minor === t.minor &&
-              s.patch === t.patch
-            ) {
-              return true;
-            }
-          }
-        }
-        return false;
-      }
-      return true;
-    }
-    t.satisfies = satisfies;
-    function satisfies(e, t, r) {
-      try {
-        t = new Range(t, r);
-      } catch (e) {
-        return false;
-      }
-      return t.test(e);
-    }
-    t.maxSatisfying = maxSatisfying;
-    function maxSatisfying(e, t, r) {
-      var n = null;
-      var i = null;
-      try {
-        var s = new Range(t, r);
-      } catch (e) {
-        return null;
-      }
-      e.forEach(function(e) {
-        if (s.test(e)) {
-          if (!n || i.compare(e) === -1) {
-            n = e;
-            i = new SemVer(n, r);
-          }
-        }
-      });
-      return n;
-    }
-    t.minSatisfying = minSatisfying;
-    function minSatisfying(e, t, r) {
-      var n = null;
-      var i = null;
-      try {
-        var s = new Range(t, r);
-      } catch (e) {
-        return null;
-      }
-      e.forEach(function(e) {
-        if (s.test(e)) {
-          if (!n || i.compare(e) === 1) {
-            n = e;
-            i = new SemVer(n, r);
-          }
-        }
-      });
-      return n;
-    }
-    t.minVersion = minVersion;
-    function minVersion(e, t) {
-      e = new Range(e, t);
-      var r = new SemVer("0.0.0");
-      if (e.test(r)) {
-        return r;
-      }
-      r = new SemVer("0.0.0-0");
-      if (e.test(r)) {
-        return r;
-      }
-      r = null;
-      for (var n = 0; n < e.set.length; ++n) {
-        var i = e.set[n];
-        i.forEach(function(e) {
-          var t = new SemVer(e.semver.version);
-          switch (e.operator) {
-            case ">":
-              if (t.prerelease.length === 0) {
-                t.patch++;
-              } else {
-                t.prerelease.push(0);
-              }
-              t.raw = t.format();
-            case "":
-            case ">=":
-              if (!r || gt(r, t)) {
-                r = t;
-              }
-              break;
-            case "<":
-            case "<=":
-              break;
-            default:
-              throw new Error("Unexpected operation: " + e.operator);
-          }
-        });
-      }
-      if (r && e.test(r)) {
-        return r;
-      }
-      return null;
-    }
-    t.validRange = validRange;
-    function validRange(e, t) {
-      try {
-        return new Range(e, t).range || "*";
-      } catch (e) {
-        return null;
-      }
-    }
-    t.ltr = ltr;
-    function ltr(e, t, r) {
-      return outside(e, t, "<", r);
-    }
-    t.gtr = gtr;
-    function gtr(e, t, r) {
-      return outside(e, t, ">", r);
-    }
-    t.outside = outside;
-    function outside(e, t, r, n) {
-      e = new SemVer(e, n);
-      t = new Range(t, n);
-      var i, s, o, a, u;
-      switch (r) {
-        case ">":
-          i = gt;
-          s = lte;
-          o = lt;
-          a = ">";
-          u = ">=";
-          break;
-        case "<":
-          i = lt;
-          s = gte;
-          o = gt;
-          a = "<";
-          u = "<=";
-          break;
-        default:
-          throw new TypeError('Must provide a hilo val of "<" or ">"');
-      }
-      if (satisfies(e, t, n)) {
-        return false;
-      }
-      for (var p = 0; p < t.set.length; ++p) {
-        var c = t.set[p];
-        var d = null;
-        var l = null;
-        c.forEach(function(e) {
-          if (e.semver === Z) {
-            e = new Comparator(">=0.0.0");
-          }
-          d = d || e;
-          l = l || e;
-          if (i(e.semver, d.semver, n)) {
-            d = e;
-          } else if (o(e.semver, l.semver, n)) {
-            l = e;
-          }
-        });
-        if (d.operator === a || d.operator === u) {
-          return false;
-        }
-        if ((!l.operator || l.operator === a) && s(e, l.semver)) {
-          return false;
-        } else if (l.operator === u && o(e, l.semver)) {
-          return false;
-        }
-      }
-      return true;
-    }
-    t.prerelease = prerelease;
-    function prerelease(e, t) {
-      var r = parse(e, t);
-      return r && r.prerelease.length ? r.prerelease : null;
-    }
-    t.intersects = intersects;
-    function intersects(e, t, r) {
-      e = new Range(e, r);
-      t = new Range(t, r);
-      return e.intersects(t);
-    }
-    t.coerce = coerce;
-    function coerce(e) {
-      if (e instanceof SemVer) {
-        return e;
-      }
-      if (typeof e !== "string") {
-        return null;
-      }
-      var t = e.match(o[P]);
-      if (t == null) {
-        return null;
-      }
-      return parse(t[1] + "." + (t[2] || "0") + "." + (t[3] || "0"));
     }
   },
   283: function(e, t, r) {
@@ -3304,8 +2193,8 @@ module.exports = (function(e, t) {
   294: function(e, t, r) {
     e.exports = parseOptions;
     const { Deprecation: n } = r(692);
-    const { getUserAgent: i } = r(796);
-    const s = r(969);
+    const { getUserAgent: i } = r(768);
+    const s = r(49);
     const o = r(215);
     const a = s((e, t) => e.warn(t));
     const u = s((e, t) => e.warn(t));
@@ -3383,7 +2272,7 @@ module.exports = (function(e, t) {
   301: function(e, t, r) {
     e.exports = normalizePaginatedListResponse;
     const { Deprecation: n } = r(692);
-    const i = r(969);
+    const i = r(49);
     const s = i((e, t) => e.warn(t));
     const o = i((e, t) => e.warn(t));
     const a = i((e, t) => e.warn(t));
@@ -3673,39 +2562,54 @@ module.exports = (function(e, t) {
     e.exports = u;
     e.exports.default = u;
   },
+  356: function(e, t) {
+    "use strict";
+    Object.defineProperty(t, "__esModule", { value: true });
+    function isObject(e) {
+      return Object.prototype.toString.call(e) === "[object Object]";
+    }
+    function isPlainObject(e) {
+      var t, r;
+      if (isObject(e) === false) return false;
+      t = e.constructor;
+      if (t === undefined) return true;
+      r = t.prototype;
+      if (isObject(r) === false) return false;
+      if (r.hasOwnProperty("isPrototypeOf") === false) {
+        return false;
+      }
+      return true;
+    }
+    t.isPlainObject = isPlainObject;
+  },
   357: function(e) {
     e.exports = require("assert");
   },
   361: function(e) {
     e.exports = {
-      _args: [["axios@0.19.0", "/Users/matan/dev/waka-box"]],
-      _from: "axios@0.19.0",
-      _id: "axios@0.19.0",
-      _inBundle: false,
-      _integrity:
-        "sha512-1uvKqKQta3KBxIz14F2v06AEHZ/dIoeKfbTRkK1E5oqjDnuEerLmYTgJB5AiQZHJcljpg1TuRzdjDR06qNk0DQ==",
-      _location: "/axios",
-      _phantomChildren: {},
-      _requested: {
-        type: "version",
-        registry: true,
-        raw: "axios@0.19.0",
-        name: "axios",
-        escapedName: "axios",
-        rawSpec: "0.19.0",
-        saveSpec: null,
-        fetchSpec: "0.19.0"
-      },
-      _requiredBy: ["/"],
-      _resolved: "https://registry.npmjs.org/axios/-/axios-0.19.0.tgz",
-      _spec: "0.19.0",
-      _where: "/Users/matan/dev/waka-box",
-      author: { name: "Matt Zabriskie" },
-      browser: { "./lib/adapters/http.js": "./lib/adapters/xhr.js" },
-      bugs: { url: "https://github.com/axios/axios/issues" },
-      bundlesize: [{ path: "./dist/axios.min.js", threshold: "5kB" }],
-      dependencies: { "follow-redirects": "1.5.10", "is-buffer": "^2.0.2" },
+      name: "axios",
+      version: "0.19.0",
       description: "Promise based HTTP client for the browser and node.js",
+      main: "index.js",
+      scripts: {
+        test: "grunt test && bundlesize",
+        start: "node ./sandbox/server.js",
+        build: "NODE_ENV=production grunt build",
+        preversion: "npm test",
+        version:
+          "npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json",
+        postversion: "git push && git push --tags",
+        examples: "node ./examples/server.js",
+        coveralls:
+          "cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+        fix: "eslint --fix lib/**/*.js"
+      },
+      repository: { type: "git", url: "https://github.com/axios/axios.git" },
+      keywords: ["xhr", "http", "ajax", "promise", "node"],
+      author: "Matt Zabriskie",
+      license: "MIT",
+      bugs: { url: "https://github.com/axios/axios/issues" },
+      homepage: "https://github.com/axios/axios",
       devDependencies: {
         bundlesize: "^0.17.0",
         coveralls: "^3.0.0",
@@ -3743,55 +2647,11 @@ module.exports = (function(e, t) {
         webpack: "^1.13.1",
         "webpack-dev-server": "^1.14.1"
       },
-      homepage: "https://github.com/axios/axios",
-      keywords: ["xhr", "http", "ajax", "promise", "node"],
-      license: "MIT",
-      main: "index.js",
-      name: "axios",
-      repository: {
-        type: "git",
-        url: "git+https://github.com/axios/axios.git"
-      },
-      scripts: {
-        build: "NODE_ENV=production grunt build",
-        coveralls:
-          "cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
-        examples: "node ./examples/server.js",
-        fix: "eslint --fix lib/**/*.js",
-        postversion: "git push && git push --tags",
-        preversion: "npm test",
-        start: "node ./sandbox/server.js",
-        test: "grunt test && bundlesize",
-        version:
-          "npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json"
-      },
+      browser: { "./lib/adapters/http.js": "./lib/adapters/xhr.js" },
       typings: "./index.d.ts",
-      version: "0.19.0"
+      dependencies: { "follow-redirects": "1.5.10", "is-buffer": "^2.0.2" },
+      bundlesize: [{ path: "./dist/axios.min.js", threshold: "5kB" }]
     };
-  },
-  363: function(e) {
-    e.exports = register;
-    function register(e, t, r, n) {
-      if (typeof r !== "function") {
-        throw new Error("method for before hook must be a function");
-      }
-      if (!n) {
-        n = {};
-      }
-      if (Array.isArray(t)) {
-        return t.reverse().reduce(function(t, r) {
-          return register.bind(null, e, r, t, n);
-        }, r)();
-      }
-      return Promise.resolve().then(function() {
-        if (!e.registry[t]) {
-          return r(n);
-        }
-        return e.registry[t].reduce(function(e, t) {
-          return t.hook.bind(null, e, n);
-        }, r)();
-      });
-    }
   },
   364: function(e) {
     "use strict";
@@ -3869,10 +2729,7 @@ module.exports = (function(e, t) {
   385: function(e, t, r) {
     "use strict";
     Object.defineProperty(t, "__esModule", { value: true });
-    function _interopDefault(e) {
-      return e && typeof e === "object" && "default" in e ? e["default"] : e;
-    }
-    var n = _interopDefault(r(696));
+    var n = r(356);
     var i = r(796);
     function lowercaseKeys(e) {
       if (!e) {
@@ -3886,7 +2743,7 @@ module.exports = (function(e, t) {
     function mergeDeep(e, t) {
       const r = Object.assign({}, e);
       Object.keys(t).forEach(i => {
-        if (n(t[i])) {
+        if (n.isPlainObject(t[i])) {
           if (!(i in e)) Object.assign(r, { [i]: t[i] });
           else r[i] = mergeDeep(e[i], t[i]);
         } else {
@@ -3894,6 +2751,14 @@ module.exports = (function(e, t) {
         }
       });
       return r;
+    }
+    function removeUndefinedProperties(e) {
+      for (const t in e) {
+        if (e[t] === undefined) {
+          delete e[t];
+        }
+      }
+      return e;
     }
     function merge(e, t, r) {
       if (typeof t === "string") {
@@ -3903,6 +2768,8 @@ module.exports = (function(e, t) {
         r = Object.assign({}, t);
       }
       r.headers = lowercaseKeys(r.headers);
+      removeUndefinedProperties(r);
+      removeUndefinedProperties(r.headers);
       const n = mergeDeep(e || {}, r);
       if (e && e.mediaType.previews.length) {
         n.mediaType.previews = e.mediaType.previews
@@ -4092,7 +2959,7 @@ module.exports = (function(e, t) {
     }
     function parse(e) {
       let t = e.method.toUpperCase();
-      let r = (e.url || "/").replace(/:([a-z]\w+)/g, "{+$1}");
+      let r = (e.url || "/").replace(/:([a-z]\w+)/g, "{$1}");
       let n = Object.assign({}, e.headers);
       let i;
       let s = omit(e, [
@@ -4174,7 +3041,7 @@ module.exports = (function(e, t) {
         parse: parse
       });
     }
-    const o = "5.5.1";
+    const o = "6.0.12";
     const a = `octokit-endpoint.js/${o} ${i.getUserAgent()}`;
     const u = {
       method: "GET",
@@ -4188,7 +3055,7 @@ module.exports = (function(e, t) {
   389: function(e, t, r) {
     "use strict";
     const n = r(747);
-    const i = r(866);
+    const i = r(452);
     function readShebang(e) {
       const t = 150;
       let r;
@@ -4284,8 +3151,22 @@ module.exports = (function(e, t) {
       e.hook.before("request", n.bind(null, e));
     }
   },
+  452: function(e, t, r) {
+    "use strict";
+    var n = r(816);
+    e.exports = function(e) {
+      var t = e.match(n);
+      if (!t) {
+        return null;
+      }
+      var r = t[0].replace(/#! ?/, "").split(" ");
+      var i = r[0].split("/").pop();
+      var s = r[1];
+      return i === "env" ? s : i + (s ? " " + s : "");
+    };
+  },
   453: function(e, t, r) {
-    var n = r(969);
+    var n = r(49);
     var i = r(9);
     var s = r(747);
     var o = function() {};
@@ -5567,7 +4448,7 @@ module.exports = (function(e, t) {
       return e && typeof e === "object" && "default" in e ? e["default"] : e;
     }
     var n = r(692);
-    var i = _interopDefault(r(969));
+    var i = _interopDefault(r(49));
     const s = i(e => console.warn(e));
     class RequestError extends Error {
       constructor(e, t, r) {
@@ -5675,6 +4556,51 @@ module.exports = (function(e, t) {
     }
     e.exports = resolveCommand;
   },
+  494: function(e, t, r) {
+    "use strict";
+    const n = r(87);
+    const i = r(955);
+    const s = new Map([
+      ["10.0", "10"],
+      ["6.3", "8.1"],
+      ["6.2", "8"],
+      ["6.1", "7"],
+      ["6.0", "Vista"],
+      ["5.2", "Server 2003"],
+      ["5.1", "XP"],
+      ["5.0", "2000"],
+      ["4.9", "ME"],
+      ["4.1", "98"],
+      ["4.0", "95"]
+    ]);
+    const o = e => {
+      const t = /\d+\.\d/.exec(e || n.release());
+      if (e && !t) {
+        throw new Error("`release` argument doesn't match `n.n`");
+      }
+      const r = (t || [])[0];
+      if (
+        (!e || e === n.release()) &&
+        ["6.1", "6.2", "6.3", "10.0"].includes(r)
+      ) {
+        let e;
+        try {
+          e = i.sync("wmic", ["os", "get", "Caption"]).stdout || "";
+        } catch (t) {
+          e =
+            i.sync("powershell", [
+              "(Get-CimInstance -ClassName Win32_OperatingSystem).caption"
+            ]).stdout || "";
+        }
+        const t = (e.match(/2008|2012|2016|2019/) || [])[0];
+        if (t) {
+          return `Server ${t}`;
+        }
+      }
+      return s.get(r);
+    };
+    e.exports = o;
+  },
   510: function(e) {
     e.exports = addHook;
     function addHook(e, t, r, n) {
@@ -5716,9 +4642,9 @@ module.exports = (function(e, t) {
     }
   },
   523: function(e, t, r) {
-    var n = r(363);
+    var n = r(280);
     var i = r(510);
-    var s = r(763);
+    var s = r(866);
     var o = Function.bind;
     var a = o.bind(o);
     function bindApi(e, t, r) {
@@ -6142,7 +5068,7 @@ module.exports = (function(e, t) {
     const s = r(489);
     const o = r(462);
     const a = r(389);
-    const u = r(280);
+    const u = r(766);
     const p = process.platform === "win32";
     const c = /\.(?:com|exe)$/i;
     const d = /node_modules[\\/].bin[\\/][^\\/]+\.cmd$/i;
@@ -6338,6 +5264,20 @@ module.exports = (function(e, t) {
         }
       });
       return t;
+    };
+  },
+  639: function(e) {
+    "use strict";
+    e.exports = function(e) {
+      var t = typeof e === "string" ? "\n" : "\n".charCodeAt();
+      var r = typeof e === "string" ? "\r" : "\r".charCodeAt();
+      if (e[e.length - 1] === t) {
+        e = e.slice(0, e.length - 1);
+      }
+      if (e[e.length - 1] === r) {
+        e = e.slice(0, e.length - 1);
+      }
+      return e;
     };
   },
   649: function(e, t, r) {
@@ -6889,19 +5829,19 @@ module.exports = (function(e, t) {
           delete w.Authorization;
         }
         var k = h.test(C);
-        var O = k ? e.httpsAgent : e.httpAgent;
-        var P = {
+        var P = k ? e.httpsAgent : e.httpAgent;
+        var O = {
           path: s(T.path, e.params, e.paramsSerializer).replace(/^\?/, ""),
           method: e.method.toUpperCase(),
           headers: w,
-          agent: O,
+          agent: P,
           auth: q
         };
         if (e.socketPath) {
-          P.socketPath = e.socketPath;
+          O.socketPath = e.socketPath;
         } else {
-          P.hostname = T.hostname;
-          P.port = T.port;
+          O.hostname = T.hostname;
+          O.port = T.port;
         }
         var A = e.proxy;
         if (!A && A !== false) {
@@ -6909,13 +5849,13 @@ module.exports = (function(e, t) {
           var G = process.env[R] || process.env[R.toUpperCase()];
           if (G) {
             var F = c.parse(G);
-            var B = process.env.no_proxy || process.env.NO_PROXY;
-            var D = true;
-            if (B) {
-              var L = B.split(",").map(function trim(e) {
+            var D = process.env.no_proxy || process.env.NO_PROXY;
+            var B = true;
+            if (D) {
+              var L = D.split(",").map(function trim(e) {
                 return e.trim();
               });
-              D = !L.some(function proxyMatch(e) {
+              B = !L.some(function proxyMatch(e) {
                 if (!e) {
                   return false;
                 }
@@ -6932,7 +5872,7 @@ module.exports = (function(e, t) {
                 return T.hostname === e;
               });
             }
-            if (D) {
+            if (B) {
               A = { host: F.hostname, port: F.port };
               if (F.auth) {
                 var U = F.auth.split(":");
@@ -6942,18 +5882,18 @@ module.exports = (function(e, t) {
           }
         }
         if (A) {
-          P.hostname = A.host;
-          P.host = A.host;
-          P.headers.host = T.hostname + (T.port ? ":" + T.port : "");
-          P.port = A.port;
-          P.path =
-            C + "//" + T.hostname + (T.port ? ":" + T.port : "") + P.path;
+          O.hostname = A.host;
+          O.host = A.host;
+          O.headers.host = T.hostname + (T.port ? ":" + T.port : "");
+          O.port = A.port;
+          O.path =
+            C + "//" + T.hostname + (T.port ? ":" + T.port : "") + O.path;
           if (A.auth) {
             var I = Buffer.from(
               A.auth.username + ":" + A.auth.password,
               "utf8"
             ).toString("base64");
-            P.headers["Proxy-Authorization"] = "Basic " + I;
+            O.headers["Proxy-Authorization"] = "Basic " + I;
           }
         }
         var $;
@@ -6964,14 +5904,14 @@ module.exports = (function(e, t) {
           $ = H ? a : o;
         } else {
           if (e.maxRedirects) {
-            P.maxRedirects = e.maxRedirects;
+            O.maxRedirects = e.maxRedirects;
           }
           $ = H ? p : u;
         }
         if (e.maxContentLength && e.maxContentLength > -1) {
-          P.maxBodyLength = e.maxContentLength;
+          O.maxBodyLength = e.maxContentLength;
         }
-        var z = $.request(P, function handleResponse(t) {
+        var z = $.request(O, function handleResponse(t) {
           if (z.aborted) return;
           var r = t;
           switch (t.headers["content-encoding"]) {
@@ -7060,7 +6000,7 @@ module.exports = (function(e, t) {
   674: function(e, t, r) {
     e.exports = authenticate;
     const { Deprecation: n } = r(692);
-    const i = r(969);
+    const i = r(49);
     const s = i((e, t) => e.warn(t));
     function authenticate(e, t) {
       s(
@@ -7159,31 +6099,6 @@ module.exports = (function(e, t) {
       }
     }
     t.Deprecation = Deprecation;
-  },
-  696: function(e) {
-    "use strict";
-    function isObject(e) {
-      return e != null && typeof e === "object" && Array.isArray(e) === false;
-    }
-    function isObjectObject(e) {
-      return (
-        isObject(e) === true &&
-        Object.prototype.toString.call(e) === "[object Object]"
-      );
-    }
-    function isPlainObject(e) {
-      var t, r;
-      if (isObjectObject(e) === false) return false;
-      t = e.constructor;
-      if (typeof t !== "function") return false;
-      r = t.prototype;
-      if (isObjectObject(r) === false) return false;
-      if (r.hasOwnProperty("isPrototypeOf") === false) {
-        return false;
-      }
-      return true;
-    }
-    e.exports = isPlainObject;
   },
   697: function(e) {
     "use strict";
@@ -13134,22 +12049,23 @@ module.exports = (function(e, t) {
     }
     var n = r(385);
     var i = r(796);
-    var s = _interopDefault(r(696));
+    var s = r(356);
     var o = _interopDefault(r(454));
-    var a = r(463);
-    const u = "5.3.1";
+    var a = r(257);
+    const u = "5.6.0";
     function getBufferResponse(e) {
       return e.arrayBuffer();
     }
     function fetchWrapper(e) {
-      if (s(e.body) || Array.isArray(e.body)) {
+      const t = e.request && e.request.log ? e.request.log : console;
+      if (s.isPlainObject(e.body) || Array.isArray(e.body)) {
         e.body = JSON.stringify(e.body);
       }
-      let t = {};
-      let r;
+      let r = {};
       let n;
-      const i = (e.request && e.request.fetch) || o;
-      return i(
+      let i;
+      const u = (e.request && e.request.fetch) || o;
+      return u(
         e.url,
         Object.assign(
           {
@@ -13161,60 +12077,83 @@ module.exports = (function(e, t) {
           e.request
         )
       )
-        .then(i => {
-          n = i.url;
-          r = i.status;
-          for (const e of i.headers) {
-            t[e[0]] = e[1];
+        .then(async s => {
+          i = s.url;
+          n = s.status;
+          for (const e of s.headers) {
+            r[e[0]] = e[1];
           }
-          if (r === 204 || r === 205) {
+          if ("deprecation" in r) {
+            const n = r.link && r.link.match(/<([^>]+)>; rel="deprecation"/);
+            const i = n && n.pop();
+            t.warn(
+              `[@octokit/request] "${e.method} ${
+                e.url
+              }" is deprecated. It is scheduled to be removed on ${r.sunset}${
+                i ? `. See ${i}` : ""
+              }`
+            );
+          }
+          if (n === 204 || n === 205) {
             return;
           }
           if (e.method === "HEAD") {
-            if (r < 400) {
+            if (n < 400) {
               return;
             }
-            throw new a.RequestError(i.statusText, r, {
-              headers: t,
+            throw new a.RequestError(s.statusText, n, {
+              response: { url: i, status: n, headers: r, data: undefined },
               request: e
             });
           }
-          if (r === 304) {
-            throw new a.RequestError("Not modified", r, {
-              headers: t,
+          if (n === 304) {
+            throw new a.RequestError("Not modified", n, {
+              response: {
+                url: i,
+                status: n,
+                headers: r,
+                data: await getResponseData(s)
+              },
               request: e
             });
           }
-          if (r >= 400) {
-            return i.text().then(n => {
-              const i = new a.RequestError(n, r, { headers: t, request: e });
-              try {
-                let e = JSON.parse(i.message);
-                Object.assign(i, e);
-                let t = e.errors;
-                i.message = i.message + ": " + t.map(JSON.stringify).join(", ");
-              } catch (e) {}
-              throw i;
+          if (n >= 400) {
+            const t = await getResponseData(s);
+            const o = new a.RequestError(toErrorMessage(t), n, {
+              response: { url: i, status: n, headers: r, data: t },
+              request: e
             });
+            throw o;
           }
-          const s = i.headers.get("content-type");
-          if (/application\/json/.test(s)) {
-            return i.json();
-          }
-          if (!s || /^text\/|charset=utf-8$/.test(s)) {
-            return i.text();
-          }
-          return getBufferResponse(i);
+          return getResponseData(s);
         })
         .then(e => {
-          return { status: r, url: n, headers: t, data: e };
+          return { status: n, url: i, headers: r, data: e };
         })
-        .catch(r => {
-          if (r instanceof a.RequestError) {
-            throw r;
-          }
-          throw new a.RequestError(r.message, 500, { headers: t, request: e });
+        .catch(t => {
+          if (t instanceof a.RequestError) throw t;
+          throw new a.RequestError(t.message, 500, { request: e });
         });
+    }
+    async function getResponseData(e) {
+      const t = e.headers.get("content-type");
+      if (/application\/json/.test(t)) {
+        return e.json();
+      }
+      if (!t || /^text\/|charset=utf-8$/.test(t)) {
+        return e.text();
+      }
+      return getBufferResponse(e);
+    }
+    function toErrorMessage(e) {
+      if (typeof e === "string") return e;
+      if ("message" in e) {
+        if (Array.isArray(e.errors)) {
+          return `${e.message}: ${e.errors.map(JSON.stringify).join(", ")}`;
+        }
+        return e.message;
+      }
+      return `Unknown error: ${JSON.stringify(e)}`;
     }
     function withDefaults(e, t) {
       const r = e.defaults(t);
@@ -13344,36 +12283,1200 @@ module.exports = (function(e, t) {
       return Math.ceil(e / t) + " " + r + "s";
     }
   },
-  763: function(e) {
-    e.exports = removeHook;
-    function removeHook(e, t, r) {
-      if (!e.registry[t]) {
-        return;
+  766: function(e, t) {
+    t = e.exports = SemVer;
+    var r;
+    if (
+      typeof process === "object" &&
+      process.env &&
+      process.env.NODE_DEBUG &&
+      /\bsemver\b/i.test(process.env.NODE_DEBUG)
+    ) {
+      r = function() {
+        var e = Array.prototype.slice.call(arguments, 0);
+        e.unshift("SEMVER");
+        console.log.apply(console, e);
+      };
+    } else {
+      r = function() {};
+    }
+    t.SEMVER_SPEC_VERSION = "2.0.0";
+    var n = 256;
+    var i = Number.MAX_SAFE_INTEGER || 9007199254740991;
+    var s = 16;
+    var o = (t.re = []);
+    var a = (t.src = []);
+    var u = 0;
+    var p = u++;
+    a[p] = "0|[1-9]\\d*";
+    var c = u++;
+    a[c] = "[0-9]+";
+    var d = u++;
+    a[d] = "\\d*[a-zA-Z-][a-zA-Z0-9-]*";
+    var l = u++;
+    a[l] = "(" + a[p] + ")\\." + "(" + a[p] + ")\\." + "(" + a[p] + ")";
+    var g = u++;
+    a[g] = "(" + a[c] + ")\\." + "(" + a[c] + ")\\." + "(" + a[c] + ")";
+    var m = u++;
+    a[m] = "(?:" + a[p] + "|" + a[d] + ")";
+    var h = u++;
+    a[h] = "(?:" + a[c] + "|" + a[d] + ")";
+    var f = u++;
+    a[f] = "(?:-(" + a[m] + "(?:\\." + a[m] + ")*))";
+    var y = u++;
+    a[y] = "(?:-?(" + a[h] + "(?:\\." + a[h] + ")*))";
+    var b = u++;
+    a[b] = "[0-9A-Za-z-]+";
+    var _ = u++;
+    a[_] = "(?:\\+(" + a[b] + "(?:\\." + a[b] + ")*))";
+    var w = u++;
+    var q = "v?" + a[l] + a[f] + "?" + a[_] + "?";
+    a[w] = "^" + q + "$";
+    var v = "[v=\\s]*" + a[g] + a[y] + "?" + a[_] + "?";
+    var E = u++;
+    a[E] = "^" + v + "$";
+    var T = u++;
+    a[T] = "((?:<|>)?=?)";
+    var C = u++;
+    a[C] = a[c] + "|x|X|\\*";
+    var j = u++;
+    a[j] = a[p] + "|x|X|\\*";
+    var S = u++;
+    a[S] =
+      "[v=\\s]*(" +
+      a[j] +
+      ")" +
+      "(?:\\.(" +
+      a[j] +
+      ")" +
+      "(?:\\.(" +
+      a[j] +
+      ")" +
+      "(?:" +
+      a[f] +
+      ")?" +
+      a[_] +
+      "?" +
+      ")?)?";
+    var x = u++;
+    a[x] =
+      "[v=\\s]*(" +
+      a[C] +
+      ")" +
+      "(?:\\.(" +
+      a[C] +
+      ")" +
+      "(?:\\.(" +
+      a[C] +
+      ")" +
+      "(?:" +
+      a[y] +
+      ")?" +
+      a[_] +
+      "?" +
+      ")?)?";
+    var k = u++;
+    a[k] = "^" + a[T] + "\\s*" + a[S] + "$";
+    var P = u++;
+    a[P] = "^" + a[T] + "\\s*" + a[x] + "$";
+    var O = u++;
+    a[O] =
+      "(?:^|[^\\d])" +
+      "(\\d{1," +
+      s +
+      "})" +
+      "(?:\\.(\\d{1," +
+      s +
+      "}))?" +
+      "(?:\\.(\\d{1," +
+      s +
+      "}))?" +
+      "(?:$|[^\\d])";
+    var A = u++;
+    a[A] = "(?:~>?)";
+    var R = u++;
+    a[R] = "(\\s*)" + a[A] + "\\s+";
+    o[R] = new RegExp(a[R], "g");
+    var G = "$1~";
+    var F = u++;
+    a[F] = "^" + a[A] + a[S] + "$";
+    var D = u++;
+    a[D] = "^" + a[A] + a[x] + "$";
+    var B = u++;
+    a[B] = "(?:\\^)";
+    var L = u++;
+    a[L] = "(\\s*)" + a[B] + "\\s+";
+    o[L] = new RegExp(a[L], "g");
+    var U = "$1^";
+    var I = u++;
+    a[I] = "^" + a[B] + a[S] + "$";
+    var $ = u++;
+    a[$] = "^" + a[B] + a[x] + "$";
+    var H = u++;
+    a[H] = "^" + a[T] + "\\s*(" + v + ")$|^$";
+    var z = u++;
+    a[z] = "^" + a[T] + "\\s*(" + q + ")$|^$";
+    var N = u++;
+    a[N] = "(\\s*)" + a[T] + "\\s*(" + v + "|" + a[S] + ")";
+    o[N] = new RegExp(a[N], "g");
+    var V = "$1$2$3";
+    var K = u++;
+    a[K] = "^\\s*(" + a[S] + ")" + "\\s+-\\s+" + "(" + a[S] + ")" + "\\s*$";
+    var W = u++;
+    a[W] = "^\\s*(" + a[x] + ")" + "\\s+-\\s+" + "(" + a[x] + ")" + "\\s*$";
+    var X = u++;
+    a[X] = "(<|>)?=?\\s*\\*";
+    for (var Y = 0; Y < u; Y++) {
+      r(Y, a[Y]);
+      if (!o[Y]) {
+        o[Y] = new RegExp(a[Y]);
       }
-      var n = e.registry[t]
+    }
+    t.parse = parse;
+    function parse(e, t) {
+      if (!t || typeof t !== "object") {
+        t = { loose: !!t, includePrerelease: false };
+      }
+      if (e instanceof SemVer) {
+        return e;
+      }
+      if (typeof e !== "string") {
+        return null;
+      }
+      if (e.length > n) {
+        return null;
+      }
+      var r = t.loose ? o[E] : o[w];
+      if (!r.test(e)) {
+        return null;
+      }
+      try {
+        return new SemVer(e, t);
+      } catch (e) {
+        return null;
+      }
+    }
+    t.valid = valid;
+    function valid(e, t) {
+      var r = parse(e, t);
+      return r ? r.version : null;
+    }
+    t.clean = clean;
+    function clean(e, t) {
+      var r = parse(e.trim().replace(/^[=v]+/, ""), t);
+      return r ? r.version : null;
+    }
+    t.SemVer = SemVer;
+    function SemVer(e, t) {
+      if (!t || typeof t !== "object") {
+        t = { loose: !!t, includePrerelease: false };
+      }
+      if (e instanceof SemVer) {
+        if (e.loose === t.loose) {
+          return e;
+        } else {
+          e = e.version;
+        }
+      } else if (typeof e !== "string") {
+        throw new TypeError("Invalid Version: " + e);
+      }
+      if (e.length > n) {
+        throw new TypeError("version is longer than " + n + " characters");
+      }
+      if (!(this instanceof SemVer)) {
+        return new SemVer(e, t);
+      }
+      r("SemVer", e, t);
+      this.options = t;
+      this.loose = !!t.loose;
+      var s = e.trim().match(t.loose ? o[E] : o[w]);
+      if (!s) {
+        throw new TypeError("Invalid Version: " + e);
+      }
+      this.raw = e;
+      this.major = +s[1];
+      this.minor = +s[2];
+      this.patch = +s[3];
+      if (this.major > i || this.major < 0) {
+        throw new TypeError("Invalid major version");
+      }
+      if (this.minor > i || this.minor < 0) {
+        throw new TypeError("Invalid minor version");
+      }
+      if (this.patch > i || this.patch < 0) {
+        throw new TypeError("Invalid patch version");
+      }
+      if (!s[4]) {
+        this.prerelease = [];
+      } else {
+        this.prerelease = s[4].split(".").map(function(e) {
+          if (/^[0-9]+$/.test(e)) {
+            var t = +e;
+            if (t >= 0 && t < i) {
+              return t;
+            }
+          }
+          return e;
+        });
+      }
+      this.build = s[5] ? s[5].split(".") : [];
+      this.format();
+    }
+    SemVer.prototype.format = function() {
+      this.version = this.major + "." + this.minor + "." + this.patch;
+      if (this.prerelease.length) {
+        this.version += "-" + this.prerelease.join(".");
+      }
+      return this.version;
+    };
+    SemVer.prototype.toString = function() {
+      return this.version;
+    };
+    SemVer.prototype.compare = function(e) {
+      r("SemVer.compare", this.version, this.options, e);
+      if (!(e instanceof SemVer)) {
+        e = new SemVer(e, this.options);
+      }
+      return this.compareMain(e) || this.comparePre(e);
+    };
+    SemVer.prototype.compareMain = function(e) {
+      if (!(e instanceof SemVer)) {
+        e = new SemVer(e, this.options);
+      }
+      return (
+        compareIdentifiers(this.major, e.major) ||
+        compareIdentifiers(this.minor, e.minor) ||
+        compareIdentifiers(this.patch, e.patch)
+      );
+    };
+    SemVer.prototype.comparePre = function(e) {
+      if (!(e instanceof SemVer)) {
+        e = new SemVer(e, this.options);
+      }
+      if (this.prerelease.length && !e.prerelease.length) {
+        return -1;
+      } else if (!this.prerelease.length && e.prerelease.length) {
+        return 1;
+      } else if (!this.prerelease.length && !e.prerelease.length) {
+        return 0;
+      }
+      var t = 0;
+      do {
+        var n = this.prerelease[t];
+        var i = e.prerelease[t];
+        r("prerelease compare", t, n, i);
+        if (n === undefined && i === undefined) {
+          return 0;
+        } else if (i === undefined) {
+          return 1;
+        } else if (n === undefined) {
+          return -1;
+        } else if (n === i) {
+          continue;
+        } else {
+          return compareIdentifiers(n, i);
+        }
+      } while (++t);
+    };
+    SemVer.prototype.inc = function(e, t) {
+      switch (e) {
+        case "premajor":
+          this.prerelease.length = 0;
+          this.patch = 0;
+          this.minor = 0;
+          this.major++;
+          this.inc("pre", t);
+          break;
+        case "preminor":
+          this.prerelease.length = 0;
+          this.patch = 0;
+          this.minor++;
+          this.inc("pre", t);
+          break;
+        case "prepatch":
+          this.prerelease.length = 0;
+          this.inc("patch", t);
+          this.inc("pre", t);
+          break;
+        case "prerelease":
+          if (this.prerelease.length === 0) {
+            this.inc("patch", t);
+          }
+          this.inc("pre", t);
+          break;
+        case "major":
+          if (
+            this.minor !== 0 ||
+            this.patch !== 0 ||
+            this.prerelease.length === 0
+          ) {
+            this.major++;
+          }
+          this.minor = 0;
+          this.patch = 0;
+          this.prerelease = [];
+          break;
+        case "minor":
+          if (this.patch !== 0 || this.prerelease.length === 0) {
+            this.minor++;
+          }
+          this.patch = 0;
+          this.prerelease = [];
+          break;
+        case "patch":
+          if (this.prerelease.length === 0) {
+            this.patch++;
+          }
+          this.prerelease = [];
+          break;
+        case "pre":
+          if (this.prerelease.length === 0) {
+            this.prerelease = [0];
+          } else {
+            var r = this.prerelease.length;
+            while (--r >= 0) {
+              if (typeof this.prerelease[r] === "number") {
+                this.prerelease[r]++;
+                r = -2;
+              }
+            }
+            if (r === -1) {
+              this.prerelease.push(0);
+            }
+          }
+          if (t) {
+            if (this.prerelease[0] === t) {
+              if (isNaN(this.prerelease[1])) {
+                this.prerelease = [t, 0];
+              }
+            } else {
+              this.prerelease = [t, 0];
+            }
+          }
+          break;
+        default:
+          throw new Error("invalid increment argument: " + e);
+      }
+      this.format();
+      this.raw = this.version;
+      return this;
+    };
+    t.inc = inc;
+    function inc(e, t, r, n) {
+      if (typeof r === "string") {
+        n = r;
+        r = undefined;
+      }
+      try {
+        return new SemVer(e, r).inc(t, n).version;
+      } catch (e) {
+        return null;
+      }
+    }
+    t.diff = diff;
+    function diff(e, t) {
+      if (eq(e, t)) {
+        return null;
+      } else {
+        var r = parse(e);
+        var n = parse(t);
+        var i = "";
+        if (r.prerelease.length || n.prerelease.length) {
+          i = "pre";
+          var s = "prerelease";
+        }
+        for (var o in r) {
+          if (o === "major" || o === "minor" || o === "patch") {
+            if (r[o] !== n[o]) {
+              return i + o;
+            }
+          }
+        }
+        return s;
+      }
+    }
+    t.compareIdentifiers = compareIdentifiers;
+    var J = /^[0-9]+$/;
+    function compareIdentifiers(e, t) {
+      var r = J.test(e);
+      var n = J.test(t);
+      if (r && n) {
+        e = +e;
+        t = +t;
+      }
+      return e === t ? 0 : r && !n ? -1 : n && !r ? 1 : e < t ? -1 : 1;
+    }
+    t.rcompareIdentifiers = rcompareIdentifiers;
+    function rcompareIdentifiers(e, t) {
+      return compareIdentifiers(t, e);
+    }
+    t.major = major;
+    function major(e, t) {
+      return new SemVer(e, t).major;
+    }
+    t.minor = minor;
+    function minor(e, t) {
+      return new SemVer(e, t).minor;
+    }
+    t.patch = patch;
+    function patch(e, t) {
+      return new SemVer(e, t).patch;
+    }
+    t.compare = compare;
+    function compare(e, t, r) {
+      return new SemVer(e, r).compare(new SemVer(t, r));
+    }
+    t.compareLoose = compareLoose;
+    function compareLoose(e, t) {
+      return compare(e, t, true);
+    }
+    t.rcompare = rcompare;
+    function rcompare(e, t, r) {
+      return compare(t, e, r);
+    }
+    t.sort = sort;
+    function sort(e, r) {
+      return e.sort(function(e, n) {
+        return t.compare(e, n, r);
+      });
+    }
+    t.rsort = rsort;
+    function rsort(e, r) {
+      return e.sort(function(e, n) {
+        return t.rcompare(e, n, r);
+      });
+    }
+    t.gt = gt;
+    function gt(e, t, r) {
+      return compare(e, t, r) > 0;
+    }
+    t.lt = lt;
+    function lt(e, t, r) {
+      return compare(e, t, r) < 0;
+    }
+    t.eq = eq;
+    function eq(e, t, r) {
+      return compare(e, t, r) === 0;
+    }
+    t.neq = neq;
+    function neq(e, t, r) {
+      return compare(e, t, r) !== 0;
+    }
+    t.gte = gte;
+    function gte(e, t, r) {
+      return compare(e, t, r) >= 0;
+    }
+    t.lte = lte;
+    function lte(e, t, r) {
+      return compare(e, t, r) <= 0;
+    }
+    t.cmp = cmp;
+    function cmp(e, t, r, n) {
+      switch (t) {
+        case "===":
+          if (typeof e === "object") e = e.version;
+          if (typeof r === "object") r = r.version;
+          return e === r;
+        case "!==":
+          if (typeof e === "object") e = e.version;
+          if (typeof r === "object") r = r.version;
+          return e !== r;
+        case "":
+        case "=":
+        case "==":
+          return eq(e, r, n);
+        case "!=":
+          return neq(e, r, n);
+        case ">":
+          return gt(e, r, n);
+        case ">=":
+          return gte(e, r, n);
+        case "<":
+          return lt(e, r, n);
+        case "<=":
+          return lte(e, r, n);
+        default:
+          throw new TypeError("Invalid operator: " + t);
+      }
+    }
+    t.Comparator = Comparator;
+    function Comparator(e, t) {
+      if (!t || typeof t !== "object") {
+        t = { loose: !!t, includePrerelease: false };
+      }
+      if (e instanceof Comparator) {
+        if (e.loose === !!t.loose) {
+          return e;
+        } else {
+          e = e.value;
+        }
+      }
+      if (!(this instanceof Comparator)) {
+        return new Comparator(e, t);
+      }
+      r("comparator", e, t);
+      this.options = t;
+      this.loose = !!t.loose;
+      this.parse(e);
+      if (this.semver === Z) {
+        this.value = "";
+      } else {
+        this.value = this.operator + this.semver.version;
+      }
+      r("comp", this);
+    }
+    var Z = {};
+    Comparator.prototype.parse = function(e) {
+      var t = this.options.loose ? o[H] : o[z];
+      var r = e.match(t);
+      if (!r) {
+        throw new TypeError("Invalid comparator: " + e);
+      }
+      this.operator = r[1];
+      if (this.operator === "=") {
+        this.operator = "";
+      }
+      if (!r[2]) {
+        this.semver = Z;
+      } else {
+        this.semver = new SemVer(r[2], this.options.loose);
+      }
+    };
+    Comparator.prototype.toString = function() {
+      return this.value;
+    };
+    Comparator.prototype.test = function(e) {
+      r("Comparator.test", e, this.options.loose);
+      if (this.semver === Z) {
+        return true;
+      }
+      if (typeof e === "string") {
+        e = new SemVer(e, this.options);
+      }
+      return cmp(e, this.operator, this.semver, this.options);
+    };
+    Comparator.prototype.intersects = function(e, t) {
+      if (!(e instanceof Comparator)) {
+        throw new TypeError("a Comparator is required");
+      }
+      if (!t || typeof t !== "object") {
+        t = { loose: !!t, includePrerelease: false };
+      }
+      var r;
+      if (this.operator === "") {
+        r = new Range(e.value, t);
+        return satisfies(this.value, r, t);
+      } else if (e.operator === "") {
+        r = new Range(this.value, t);
+        return satisfies(e.semver, r, t);
+      }
+      var n =
+        (this.operator === ">=" || this.operator === ">") &&
+        (e.operator === ">=" || e.operator === ">");
+      var i =
+        (this.operator === "<=" || this.operator === "<") &&
+        (e.operator === "<=" || e.operator === "<");
+      var s = this.semver.version === e.semver.version;
+      var o =
+        (this.operator === ">=" || this.operator === "<=") &&
+        (e.operator === ">=" || e.operator === "<=");
+      var a =
+        cmp(this.semver, "<", e.semver, t) &&
+        (this.operator === ">=" || this.operator === ">") &&
+          (e.operator === "<=" || e.operator === "<");
+      var u =
+        cmp(this.semver, ">", e.semver, t) &&
+        (this.operator === "<=" || this.operator === "<") &&
+          (e.operator === ">=" || e.operator === ">");
+      return n || i || (s && o) || a || u;
+    };
+    t.Range = Range;
+    function Range(e, t) {
+      if (!t || typeof t !== "object") {
+        t = { loose: !!t, includePrerelease: false };
+      }
+      if (e instanceof Range) {
+        if (
+          e.loose === !!t.loose &&
+          e.includePrerelease === !!t.includePrerelease
+        ) {
+          return e;
+        } else {
+          return new Range(e.raw, t);
+        }
+      }
+      if (e instanceof Comparator) {
+        return new Range(e.value, t);
+      }
+      if (!(this instanceof Range)) {
+        return new Range(e, t);
+      }
+      this.options = t;
+      this.loose = !!t.loose;
+      this.includePrerelease = !!t.includePrerelease;
+      this.raw = e;
+      this.set = e
+        .split(/\s*\|\|\s*/)
         .map(function(e) {
-          return e.orig;
-        })
-        .indexOf(r);
-      if (n === -1) {
-        return;
+          return this.parseRange(e.trim());
+        }, this)
+        .filter(function(e) {
+          return e.length;
+        });
+      if (!this.set.length) {
+        throw new TypeError("Invalid SemVer Range: " + e);
       }
-      e.registry[t].splice(n, 1);
+      this.format();
+    }
+    Range.prototype.format = function() {
+      this.range = this.set
+        .map(function(e) {
+          return e.join(" ").trim();
+        })
+        .join("||")
+        .trim();
+      return this.range;
+    };
+    Range.prototype.toString = function() {
+      return this.range;
+    };
+    Range.prototype.parseRange = function(e) {
+      var t = this.options.loose;
+      e = e.trim();
+      var n = t ? o[W] : o[K];
+      e = e.replace(n, hyphenReplace);
+      r("hyphen replace", e);
+      e = e.replace(o[N], V);
+      r("comparator trim", e, o[N]);
+      e = e.replace(o[R], G);
+      e = e.replace(o[L], U);
+      e = e.split(/\s+/).join(" ");
+      var i = t ? o[H] : o[z];
+      var s = e
+        .split(" ")
+        .map(function(e) {
+          return parseComparator(e, this.options);
+        }, this)
+        .join(" ")
+        .split(/\s+/);
+      if (this.options.loose) {
+        s = s.filter(function(e) {
+          return !!e.match(i);
+        });
+      }
+      s = s.map(function(e) {
+        return new Comparator(e, this.options);
+      }, this);
+      return s;
+    };
+    Range.prototype.intersects = function(e, t) {
+      if (!(e instanceof Range)) {
+        throw new TypeError("a Range is required");
+      }
+      return this.set.some(function(r) {
+        return r.every(function(r) {
+          return e.set.some(function(e) {
+            return e.every(function(e) {
+              return r.intersects(e, t);
+            });
+          });
+        });
+      });
+    };
+    t.toComparators = toComparators;
+    function toComparators(e, t) {
+      return new Range(e, t).set.map(function(e) {
+        return e
+          .map(function(e) {
+            return e.value;
+          })
+          .join(" ")
+          .trim()
+          .split(" ");
+      });
+    }
+    function parseComparator(e, t) {
+      r("comp", e, t);
+      e = replaceCarets(e, t);
+      r("caret", e);
+      e = replaceTildes(e, t);
+      r("tildes", e);
+      e = replaceXRanges(e, t);
+      r("xrange", e);
+      e = replaceStars(e, t);
+      r("stars", e);
+      return e;
+    }
+    function isX(e) {
+      return !e || e.toLowerCase() === "x" || e === "*";
+    }
+    function replaceTildes(e, t) {
+      return e
+        .trim()
+        .split(/\s+/)
+        .map(function(e) {
+          return replaceTilde(e, t);
+        })
+        .join(" ");
+    }
+    function replaceTilde(e, t) {
+      var n = t.loose ? o[D] : o[F];
+      return e.replace(n, function(t, n, i, s, o) {
+        r("tilde", e, t, n, i, s, o);
+        var a;
+        if (isX(n)) {
+          a = "";
+        } else if (isX(i)) {
+          a = ">=" + n + ".0.0 <" + (+n + 1) + ".0.0";
+        } else if (isX(s)) {
+          a = ">=" + n + "." + i + ".0 <" + n + "." + (+i + 1) + ".0";
+        } else if (o) {
+          r("replaceTilde pr", o);
+          a =
+            ">=" +
+            n +
+            "." +
+            i +
+            "." +
+            s +
+            "-" +
+            o +
+            " <" +
+            n +
+            "." +
+            (+i + 1) +
+            ".0";
+        } else {
+          a = ">=" + n + "." + i + "." + s + " <" + n + "." + (+i + 1) + ".0";
+        }
+        r("tilde return", a);
+        return a;
+      });
+    }
+    function replaceCarets(e, t) {
+      return e
+        .trim()
+        .split(/\s+/)
+        .map(function(e) {
+          return replaceCaret(e, t);
+        })
+        .join(" ");
+    }
+    function replaceCaret(e, t) {
+      r("caret", e, t);
+      var n = t.loose ? o[$] : o[I];
+      return e.replace(n, function(t, n, i, s, o) {
+        r("caret", e, t, n, i, s, o);
+        var a;
+        if (isX(n)) {
+          a = "";
+        } else if (isX(i)) {
+          a = ">=" + n + ".0.0 <" + (+n + 1) + ".0.0";
+        } else if (isX(s)) {
+          if (n === "0") {
+            a = ">=" + n + "." + i + ".0 <" + n + "." + (+i + 1) + ".0";
+          } else {
+            a = ">=" + n + "." + i + ".0 <" + (+n + 1) + ".0.0";
+          }
+        } else if (o) {
+          r("replaceCaret pr", o);
+          if (n === "0") {
+            if (i === "0") {
+              a =
+                ">=" +
+                n +
+                "." +
+                i +
+                "." +
+                s +
+                "-" +
+                o +
+                " <" +
+                n +
+                "." +
+                i +
+                "." +
+                (+s + 1);
+            } else {
+              a =
+                ">=" +
+                n +
+                "." +
+                i +
+                "." +
+                s +
+                "-" +
+                o +
+                " <" +
+                n +
+                "." +
+                (+i + 1) +
+                ".0";
+            }
+          } else {
+            a =
+              ">=" + n + "." + i + "." + s + "-" + o + " <" + (+n + 1) + ".0.0";
+          }
+        } else {
+          r("no pr");
+          if (n === "0") {
+            if (i === "0") {
+              a =
+                ">=" +
+                n +
+                "." +
+                i +
+                "." +
+                s +
+                " <" +
+                n +
+                "." +
+                i +
+                "." +
+                (+s + 1);
+            } else {
+              a =
+                ">=" + n + "." + i + "." + s + " <" + n + "." + (+i + 1) + ".0";
+            }
+          } else {
+            a = ">=" + n + "." + i + "." + s + " <" + (+n + 1) + ".0.0";
+          }
+        }
+        r("caret return", a);
+        return a;
+      });
+    }
+    function replaceXRanges(e, t) {
+      r("replaceXRanges", e, t);
+      return e
+        .split(/\s+/)
+        .map(function(e) {
+          return replaceXRange(e, t);
+        })
+        .join(" ");
+    }
+    function replaceXRange(e, t) {
+      e = e.trim();
+      var n = t.loose ? o[P] : o[k];
+      return e.replace(n, function(t, n, i, s, o, a) {
+        r("xRange", e, t, n, i, s, o, a);
+        var u = isX(i);
+        var p = u || isX(s);
+        var c = p || isX(o);
+        var d = c;
+        if (n === "=" && d) {
+          n = "";
+        }
+        if (u) {
+          if (n === ">" || n === "<") {
+            t = "<0.0.0";
+          } else {
+            t = "*";
+          }
+        } else if (n && d) {
+          if (p) {
+            s = 0;
+          }
+          o = 0;
+          if (n === ">") {
+            n = ">=";
+            if (p) {
+              i = +i + 1;
+              s = 0;
+              o = 0;
+            } else {
+              s = +s + 1;
+              o = 0;
+            }
+          } else if (n === "<=") {
+            n = "<";
+            if (p) {
+              i = +i + 1;
+            } else {
+              s = +s + 1;
+            }
+          }
+          t = n + i + "." + s + "." + o;
+        } else if (p) {
+          t = ">=" + i + ".0.0 <" + (+i + 1) + ".0.0";
+        } else if (c) {
+          t = ">=" + i + "." + s + ".0 <" + i + "." + (+s + 1) + ".0";
+        }
+        r("xRange return", t);
+        return t;
+      });
+    }
+    function replaceStars(e, t) {
+      r("replaceStars", e, t);
+      return e.trim().replace(o[X], "");
+    }
+    function hyphenReplace(e, t, r, n, i, s, o, a, u, p, c, d, l) {
+      if (isX(r)) {
+        t = "";
+      } else if (isX(n)) {
+        t = ">=" + r + ".0.0";
+      } else if (isX(i)) {
+        t = ">=" + r + "." + n + ".0";
+      } else {
+        t = ">=" + t;
+      }
+      if (isX(u)) {
+        a = "";
+      } else if (isX(p)) {
+        a = "<" + (+u + 1) + ".0.0";
+      } else if (isX(c)) {
+        a = "<" + u + "." + (+p + 1) + ".0";
+      } else if (d) {
+        a = "<=" + u + "." + p + "." + c + "-" + d;
+      } else {
+        a = "<=" + a;
+      }
+      return (t + " " + a).trim();
+    }
+    Range.prototype.test = function(e) {
+      if (!e) {
+        return false;
+      }
+      if (typeof e === "string") {
+        e = new SemVer(e, this.options);
+      }
+      for (var t = 0; t < this.set.length; t++) {
+        if (testSet(this.set[t], e, this.options)) {
+          return true;
+        }
+      }
+      return false;
+    };
+    function testSet(e, t, n) {
+      for (var i = 0; i < e.length; i++) {
+        if (!e[i].test(t)) {
+          return false;
+        }
+      }
+      if (t.prerelease.length && !n.includePrerelease) {
+        for (i = 0; i < e.length; i++) {
+          r(e[i].semver);
+          if (e[i].semver === Z) {
+            continue;
+          }
+          if (e[i].semver.prerelease.length > 0) {
+            var s = e[i].semver;
+            if (
+              s.major === t.major &&
+              s.minor === t.minor &&
+              s.patch === t.patch
+            ) {
+              return true;
+            }
+          }
+        }
+        return false;
+      }
+      return true;
+    }
+    t.satisfies = satisfies;
+    function satisfies(e, t, r) {
+      try {
+        t = new Range(t, r);
+      } catch (e) {
+        return false;
+      }
+      return t.test(e);
+    }
+    t.maxSatisfying = maxSatisfying;
+    function maxSatisfying(e, t, r) {
+      var n = null;
+      var i = null;
+      try {
+        var s = new Range(t, r);
+      } catch (e) {
+        return null;
+      }
+      e.forEach(function(e) {
+        if (s.test(e)) {
+          if (!n || i.compare(e) === -1) {
+            n = e;
+            i = new SemVer(n, r);
+          }
+        }
+      });
+      return n;
+    }
+    t.minSatisfying = minSatisfying;
+    function minSatisfying(e, t, r) {
+      var n = null;
+      var i = null;
+      try {
+        var s = new Range(t, r);
+      } catch (e) {
+        return null;
+      }
+      e.forEach(function(e) {
+        if (s.test(e)) {
+          if (!n || i.compare(e) === 1) {
+            n = e;
+            i = new SemVer(n, r);
+          }
+        }
+      });
+      return n;
+    }
+    t.minVersion = minVersion;
+    function minVersion(e, t) {
+      e = new Range(e, t);
+      var r = new SemVer("0.0.0");
+      if (e.test(r)) {
+        return r;
+      }
+      r = new SemVer("0.0.0-0");
+      if (e.test(r)) {
+        return r;
+      }
+      r = null;
+      for (var n = 0; n < e.set.length; ++n) {
+        var i = e.set[n];
+        i.forEach(function(e) {
+          var t = new SemVer(e.semver.version);
+          switch (e.operator) {
+            case ">":
+              if (t.prerelease.length === 0) {
+                t.patch++;
+              } else {
+                t.prerelease.push(0);
+              }
+              t.raw = t.format();
+            case "":
+            case ">=":
+              if (!r || gt(r, t)) {
+                r = t;
+              }
+              break;
+            case "<":
+            case "<=":
+              break;
+            default:
+              throw new Error("Unexpected operation: " + e.operator);
+          }
+        });
+      }
+      if (r && e.test(r)) {
+        return r;
+      }
+      return null;
+    }
+    t.validRange = validRange;
+    function validRange(e, t) {
+      try {
+        return new Range(e, t).range || "*";
+      } catch (e) {
+        return null;
+      }
+    }
+    t.ltr = ltr;
+    function ltr(e, t, r) {
+      return outside(e, t, "<", r);
+    }
+    t.gtr = gtr;
+    function gtr(e, t, r) {
+      return outside(e, t, ">", r);
+    }
+    t.outside = outside;
+    function outside(e, t, r, n) {
+      e = new SemVer(e, n);
+      t = new Range(t, n);
+      var i, s, o, a, u;
+      switch (r) {
+        case ">":
+          i = gt;
+          s = lte;
+          o = lt;
+          a = ">";
+          u = ">=";
+          break;
+        case "<":
+          i = lt;
+          s = gte;
+          o = gt;
+          a = "<";
+          u = "<=";
+          break;
+        default:
+          throw new TypeError('Must provide a hilo val of "<" or ">"');
+      }
+      if (satisfies(e, t, n)) {
+        return false;
+      }
+      for (var p = 0; p < t.set.length; ++p) {
+        var c = t.set[p];
+        var d = null;
+        var l = null;
+        c.forEach(function(e) {
+          if (e.semver === Z) {
+            e = new Comparator(">=0.0.0");
+          }
+          d = d || e;
+          l = l || e;
+          if (i(e.semver, d.semver, n)) {
+            d = e;
+          } else if (o(e.semver, l.semver, n)) {
+            l = e;
+          }
+        });
+        if (d.operator === a || d.operator === u) {
+          return false;
+        }
+        if ((!l.operator || l.operator === a) && s(e, l.semver)) {
+          return false;
+        } else if (l.operator === u && o(e, l.semver)) {
+          return false;
+        }
+      }
+      return true;
+    }
+    t.prerelease = prerelease;
+    function prerelease(e, t) {
+      var r = parse(e, t);
+      return r && r.prerelease.length ? r.prerelease : null;
+    }
+    t.intersects = intersects;
+    function intersects(e, t, r) {
+      e = new Range(e, r);
+      t = new Range(t, r);
+      return e.intersects(t);
+    }
+    t.coerce = coerce;
+    function coerce(e) {
+      if (e instanceof SemVer) {
+        return e;
+      }
+      if (typeof e !== "string") {
+        return null;
+      }
+      var t = e.match(o[O]);
+      if (t == null) {
+        return null;
+      }
+      return parse(t[1] + "." + (t[2] || "0") + "." + (t[3] || "0"));
     }
   },
-  768: function(e) {
+  768: function(e, t, r) {
     "use strict";
-    e.exports = function(e) {
-      var t = typeof e === "string" ? "\n" : "\n".charCodeAt();
-      var r = typeof e === "string" ? "\r" : "\r".charCodeAt();
-      if (e[e.length - 1] === t) {
-        e = e.slice(0, e.length - 1);
+    Object.defineProperty(t, "__esModule", { value: true });
+    function _interopDefault(e) {
+      return e && typeof e === "object" && "default" in e ? e["default"] : e;
+    }
+    var n = _interopDefault(r(2));
+    function getUserAgent() {
+      try {
+        return `Node.js/${process.version.substr(1)} (${n()}; ${process.arch})`;
+      } catch (e) {
+        if (/wmic os get Caption/.test(e.message)) {
+          return "Windows <version undetectable>";
+        }
+        throw e;
       }
-      if (e[e.length - 1] === r) {
-        e = e.slice(0, e.length - 1);
-      }
-      return e;
-    };
+    }
+    t.getUserAgent = getUserAgent;
   },
   777: function(e, t, r) {
     e.exports = getFirstPage;
@@ -13627,22 +13730,19 @@ module.exports = (function(e, t) {
       } catch (e) {}
     }
   },
-  796: function(e, t, r) {
+  796: function(e, t) {
     "use strict";
     Object.defineProperty(t, "__esModule", { value: true });
-    function _interopDefault(e) {
-      return e && typeof e === "object" && "default" in e ? e["default"] : e;
-    }
-    var n = _interopDefault(r(2));
     function getUserAgent() {
-      try {
-        return `Node.js/${process.version.substr(1)} (${n()}; ${process.arch})`;
-      } catch (e) {
-        if (/wmic os get Caption/.test(e.message)) {
-          return "Windows <version undetectable>";
-        }
-        throw e;
+      if (typeof navigator === "object" && "userAgent" in navigator) {
+        return navigator.userAgent;
       }
+      if (typeof process === "object" && "version" in process) {
+        return `Node.js/${process.version.substr(1)} (${process.platform}; ${
+          process.arch
+        })`;
+      }
+      return "<environment undetectable>";
     }
     t.getUserAgent = getUserAgent;
   },
@@ -13959,8 +14059,8 @@ module.exports = (function(e, t) {
       S = y.splice;
     var x = getNative(f, "Map"),
       k = getNative(Object, "create");
-    var O = j ? j.prototype : undefined,
-      P = O ? O.toString : undefined;
+    var P = j ? j.prototype : undefined,
+      O = P ? P.toString : undefined;
     function Hash(e) {
       var t = -1,
         r = e ? e.length : 0;
@@ -14111,7 +14211,7 @@ module.exports = (function(e, t) {
         return e;
       }
       if (isSymbol(e)) {
-        return P ? P.call(e) : "";
+        return O ? O.call(e) : "";
       }
       var t = e + "";
       return t == "0" && 1 / e == -n ? "-0" : t;
@@ -14320,19 +14420,22 @@ module.exports = (function(e, t) {
           };
         })();
   },
-  866: function(e, t, r) {
-    "use strict";
-    var n = r(816);
-    e.exports = function(e) {
-      var t = e.match(n);
-      if (!t) {
-        return null;
+  866: function(e) {
+    e.exports = removeHook;
+    function removeHook(e, t, r) {
+      if (!e.registry[t]) {
+        return;
       }
-      var r = t[0].replace(/#! ?/, "").split(" ");
-      var i = r[0].split("/").pop();
-      var s = r[1];
-      return i === "env" ? s : i + (s ? " " + s : "");
-    };
+      var n = e.registry[t]
+        .map(function(e) {
+          return e.orig;
+        })
+        .indexOf(r);
+      if (n === -1) {
+        return;
+      }
+      e.registry[t].splice(n, 1);
+    }
   },
   867: function(e) {
     e.exports = require("tty");
@@ -14446,8 +14549,8 @@ module.exports = (function(e, t) {
     );
     var x = b.Symbol,
       k = _.splice;
-    var O = getNative(b, "Map"),
-      P = getNative(Object, "create");
+    var P = getNative(b, "Map"),
+      O = getNative(Object, "create");
     var A = x ? x.prototype : undefined,
       R = A ? A.toString : undefined;
     function Hash(e) {
@@ -14460,14 +14563,14 @@ module.exports = (function(e, t) {
       }
     }
     function hashClear() {
-      this.__data__ = P ? P(null) : {};
+      this.__data__ = O ? O(null) : {};
     }
     function hashDelete(e) {
       return this.has(e) && delete this.__data__[e];
     }
     function hashGet(e) {
       var t = this.__data__;
-      if (P) {
+      if (O) {
         var n = t[e];
         return n === r ? undefined : n;
       }
@@ -14475,11 +14578,11 @@ module.exports = (function(e, t) {
     }
     function hashHas(e) {
       var t = this.__data__;
-      return P ? t[e] !== undefined : C.call(t, e);
+      return O ? t[e] !== undefined : C.call(t, e);
     }
     function hashSet(e, t) {
       var n = this.__data__;
-      n[e] = P && t === undefined ? r : t;
+      n[e] = O && t === undefined ? r : t;
       return this;
     }
     Hash.prototype.clear = hashClear;
@@ -14548,7 +14651,7 @@ module.exports = (function(e, t) {
     function mapCacheClear() {
       this.__data__ = {
         hash: new Hash(),
-        map: new (O || ListCache)(),
+        map: new (P || ListCache)(),
         string: new Hash()
       };
     }
@@ -14916,7 +15019,7 @@ module.exports = (function(e, t) {
     const n = r(622);
     const i = r(129);
     const s = r(20);
-    const o = r(768);
+    const o = r(639);
     const a = r(621);
     const u = r(323);
     const p = r(145);
@@ -15223,44 +15326,5 @@ module.exports = (function(e, t) {
       u.getBufferedLength = () => o;
       return u;
     };
-  },
-  969: function(e, t, r) {
-    var n = r(11);
-    e.exports = n(once);
-    e.exports.strict = n(onceStrict);
-    once.proto = once(function() {
-      Object.defineProperty(Function.prototype, "once", {
-        value: function() {
-          return once(this);
-        },
-        configurable: true
-      });
-      Object.defineProperty(Function.prototype, "onceStrict", {
-        value: function() {
-          return onceStrict(this);
-        },
-        configurable: true
-      });
-    });
-    function once(e) {
-      var t = function() {
-        if (t.called) return t.value;
-        t.called = true;
-        return (t.value = e.apply(this, arguments));
-      };
-      t.called = false;
-      return t;
-    }
-    function onceStrict(e) {
-      var t = function() {
-        if (t.called) throw new Error(t.onceError);
-        t.called = true;
-        return (t.value = e.apply(this, arguments));
-      };
-      var r = e.name || "Function wrapped with `once`";
-      t.onceError = r + " shouldn't be called more than once";
-      t.called = false;
-      return t;
-    }
   }
 });
