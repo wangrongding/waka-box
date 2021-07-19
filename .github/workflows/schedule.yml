@@ -3,7 +3,7 @@ on:
   schedule:
     - cron: "*/1 * * * *"
   push:
-    branches: 
+    branches:
       - master
 jobs:
   update-gist:
@@ -16,6 +16,3 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           GIST_ID: dde0a407006d7fdd5fb0345cd2fc1a6c
           WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }}
-          SHOW_LANGUAGE : True
-          SHOW_OS : True
-          SHOW_EDITORS : True
