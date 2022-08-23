@@ -14,6 +14,9 @@ jobs:
         uses: wangrongding/waka-box@master
       - name: Keepalive Workflow
         uses: gautamkrishnar/keepalive-workflow@1.0.9
+        with:
+          # GitHub access token with Repo scope
+          gh_token: ${{ secrets.GH_TOKEN }}
 
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
