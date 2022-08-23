@@ -12,11 +12,10 @@ jobs:
       - uses: actions/checkout@master
       - name: Update gist
         uses: wangrongding/waka-box@master
-        
-      - name: Keepalive Workflow
-        uses: gautamkrishnar/keepalive-workflow@v1
-
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           GIST_ID: dde0a407006d7fdd5fb0345cd2fc1a6c
           WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }}
+          
+      - name: Keepalive Workflow
+        uses: gautamkrishnar/keepalive-workflow@1.0.9
